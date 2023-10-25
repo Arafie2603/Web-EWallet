@@ -20,11 +20,11 @@
                         </div>
                     </div>
                 @endif
-                @if (session('info'))
-                    <div class="alert alert-info alert-dimissible show fade">
+                @if (session('warning'))
+                    <div class="alert alert-warning alert-dimissible show fade">
                         <div class="alert-body">
                             <button class="close" data-dismiss="alert"><span>x</span></button>
-                            {{ session('info') }}
+                            {{ session('warning') }}
                         </div>
                     </div>
                 @endif
@@ -133,7 +133,7 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form action="{{ route('produk.index') }}/{{ $prod->id_produk }}" method="POST"
+                        <form action="{{ route('produk.update',$prod->id_produk) }}" method="POST"
                             enctype="multipart/form-data">
                             @csrf
                             <div class="modal-body">
@@ -149,6 +149,23 @@
                                             <small class="text-danger">{{ $message }}</small>
                                         @enderror
                                     </div>
+                                </div>
+                                <div class="form-group mt-3">
+                                    <input type="number" id="harga" name="harga" placeholder="Ubah harga produk"
+                                        value="{{$prod->harga}}" class="form-control" required autocomplete="off">
+                                </div>
+                                <div class="form-group mt-3">
+                                    <input type="number" id="poin" name="poin" placeholder="Ubah poin produk"
+                                        value="{{$prod->poin}}" class="form-control" required autocomplete="off">
+                                </div>
+                                <div class="form-group mt-3">
+                                    <select class="form-control select2 mx-auto mt-2" style="width: 100%" name="status"
+                                        id="status" required>
+                                        <option selected disabled value="">
+                                            Pilih Status</option>
+                                        <option value="Tersedia">Tersedia</option>
+                                        <option value="Kosong">Kosong</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="modal-footer">

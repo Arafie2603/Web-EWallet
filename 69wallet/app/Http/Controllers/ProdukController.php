@@ -97,7 +97,21 @@ class ProdukController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $produk = Produk::findorfail($id);
+        $produk->nama_produk = $request->nama_produk;
+        if ($request->hasFile('foto_produk')) {
+            $image = $request->file('foto_produk');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->storeAs('public/storage', $imageName);
+            $produk->foto_produk = '/' . $imageName;
+        }
+
+        $produk->poin = $request->poin;
+        $produk->harga = $request->harga;
+        $produk->status = $request->status;
+
+        $produk->save();  
+        return back()->with('warning', 'Data berhasil diubah');      
     }
 
     /**

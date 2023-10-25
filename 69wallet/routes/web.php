@@ -46,6 +46,7 @@ Route::group(['middleware' => ['auth', 'cekleveladmin'], 'prefix' => 'admin'], f
     // Route::get('user', [AdminController::class, 'userInfo'])->name('user.userInfo');
     Route::resource('produk', ProdukController::class);
     Route::resource('kategori', KategoriController::class);
+    // Route::get('/produk/{id}', [ProdukController::class, 'update']);
 });
 
 

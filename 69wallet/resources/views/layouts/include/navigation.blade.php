@@ -81,19 +81,14 @@
 
             <!-- Topbar -->
             <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
-
-
-
+                @if (url())
+                    sasas
+                @endif
+                sas
                 <!-- Sidebar Toggle (Topbar) -->
                 <button id="sidebarToggleTop" class="btn btn-dark bg-black d-md-none rounded-circle mr-3">
                     <i class="fa fa-bars" style="color: black;"></i>
                 </button>
-
-
-                <!-- Topbar Search -->
-
-
                 <!-- Topbar Navbar -->
                 <ul class="navbar-nav ml-auto">
 
@@ -149,10 +144,8 @@
             <!-- End of Topbar -->
 
             <!-- Begin Page Content -->
+            <!-- /.container-fluid -->
+
             <div class="">
                 @yield('content')
             </div>
-            <!-- /.container-fluid -->
-
-        </div>
-        <!-- End of Main Content -->

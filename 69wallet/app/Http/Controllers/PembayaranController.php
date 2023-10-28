@@ -38,7 +38,7 @@ class PembayaranController extends Controller
 
 
 
-
+        // Join antara tabel akun dan transaksi sesuai dengan akun (user login)
         $akun = Akun::with('transaksis')->find($transaksi->akun_id);
         // $transaksi = Transaksi::with('transaksidetail')->find(Auth::user()->id);
         $data = Carbon::now();
@@ -52,17 +52,28 @@ class PembayaranController extends Controller
         $saldoUser = $user->akun->saldo;
         $hargaProduk = $request->harga;
         $harga = 0;
+
         // menyimpan value poin dan harga (poin)
         $poinUser = $user->akun->poin;
         $poinProduk = $request->poin;
+
+        $poin_achieve = 0;
         if ($request->payment == 'saldo') {
 
             $saldoBaruUser = $saldoUser - $hargaProduk;
             $harga = $hargaProduk;
             $user->akun->saldo = $saldoBaruUser;
-            if ($request->harga >= 50000 && $request->payment == 'saldo') {
-                $user->akun->poin += 10;
+            if ($request->harga >= 5000 && $request->harga < 5000 && $request->payment == 'saldo') {
+                $poin_achieve = 1;
+                $user->akun->poin += $poin_achieve;
+            } else if ($request->harga >= 10000 && $request->harga < 10000 && $request->payment == 'saldo') {
+                $poin_achieve = 2;
+                $user->akun->poin += $poin_achieve;
+            } else if ($request->harga >= 20000 && $request->harga <= 20000 && $request->payment == 'saldo') {
+                $poin_achieve = 3;
+                $user->akun->poin += $poin_achieve;
             }
+            
         } else if ($request->payment == 'poin') {
 
             $poinBaru = $poinUser - $poinProduk;
@@ -97,15 +108,14 @@ class PembayaranController extends Controller
         $transaksiDetail->jumlah = 1;
         $transaksiDetail->save();
 
-        // $produk =  Produk::where('id_produk', $id)->first();
-        // $akun = Akun::with('transaksis')->find($transaksi->akun_id);
 
+        // Join antara transa detial dengan produk berdasarkan id user yang melakukan transaksi
         $tranDetail = TransaksiDetail::with('produk')->where('produk_id', $request->id_produk)->first();
 
-        // dd($tranDetail->produk->nama_produk);
 
 
-        return view('pages.receipt', compact('data', 'transaksi', 'transaksiDetail', 'tranDetail'));
+
+        return view('pages.receipt', compact('data', 'transaksi', 'transaksiDetail', 'tranDetail', 'poin_achieve'));
     }
 
     /**

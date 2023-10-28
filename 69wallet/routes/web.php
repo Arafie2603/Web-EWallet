@@ -52,15 +52,18 @@ Route::group(['middleware' => ['auth', 'cekleveladmin'], 'prefix' => 'admin'], f
 
 Route::group(['middleware' => 'auth', 'checkaccess'], function() {
     Route::resource('dashboard_user', UserController::class);
+    Route::post('dash_poin', 'App\Http\Controllers\UserController@index');
+    Route::get('dash_poin', 'App\Http\Controllers\UserController@index');
+    // Route::get('dash_poin', [UserController::class, 'index']);
     Route::get('/profile', [LoginController::class, 'profile'])->name('profile');
 
     // Route::resource('kategori_produk', KategoriProduk::class);
     Route::resource('kategori_produk', KategoriProduk::class);
     Route::get('/reward', 'App\Http\Controllers\KategoriProduk@halreward')->name('reward');
-    
-    Route::get('produk_kategori/{id}', 'App\Http\Controllers\KategoriProduk@show');
-    Route::get('produk_pembayaran/{id}', [ProdukController::class, 'bayar']);
+    Route::get('produk_kategori/{id}', 'App\Http\Controllers\KategoriProduk@show')->name('produk_kategori.produk');
 
+
+    Route::get('produk_pembayaran/{id}', [ProdukController::class, 'bayar']);
 
     Route::post('pembayaran', [PembayaranController::class, 'pembayaran'])->name('pembayaran.bayar');
     Route::post('receipt', [PembayaranController::class, 'receipt'])->name('receipt');

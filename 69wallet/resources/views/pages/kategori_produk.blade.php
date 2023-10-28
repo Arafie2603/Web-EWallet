@@ -3,7 +3,6 @@
     <div class="container-fluid">
 
         <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800">Kategori Produk</h1>
         <!-- DataTales Example -->
 
         {{-- <div class="card-header py-3">
@@ -14,27 +13,60 @@
 
         <!-- Button trigger modal -->
 
+
+
+
         <div class="container-fluid p-0">
-
-
-            <div class="row">
+            <div class="row mr-2">
                 @foreach ($kategori as $kate)
-                    <div class="col-6 col-md-3">
-                        <div class="card">
-                            <a href="{{url('produk_kategori')}}/{{$kate->id_kategori}}"><img class="card-img-top responsive"
-                                    style="object-fit:cover; width: 100%;height: 200px;"
-                                    src="{{ asset('storage/storage/' . $kate->foto_kategori) }}" alt="Card image cap"></a>
-                            <div class="card-body">
-                                <p class="card-text text-center">{{ $kate->nama_kategori }}</p>
-                            </div>
-                        </div>
-                    </div>
+                    <ul class="list-group list-group-horizontal">
+                        <li class="list-group-item">
+                            <a class="card-text text-center text-decoration-none text-dark"
+                                href="{{ url('produk_kategori') }}/{{ $kate->id_kategori }}">{{ $kate->nama_kategori }}</a>
+                        </li>
+                    </ul>
                 @endforeach
             </div>
 
+            <!-- Telkomsel -->
+            <div class="col-xl-12 col-md-6 mb-4">
 
+                <div class=" h-100">
+
+                    <div class="card-body" align="Center">
+                        <h5 class="card-title"></h5>
+                        {{-- ===== AWALAN FORM ===== --}}
+                        <form action="{{ url('produk_beli') }}" enctype="multipart/form-data" method="POST">
+                            <div class="row">
+                                @foreach ($produk as $prd)
+                                    @csrf
+                                    <div class="col-3">
+                                        <div class="card text-left mb-3">
+                                            <img src="{{ asset('storage/storage/' . $prd->foto_produk) }}"
+                                                class="rounded-top" width="100%" height="150" alt="">
+                                            <div class="card-body">
+                                                <h5 class="card-title ">{{ $prd->nama_produk }}</h5>
+                                                <h6 class="card-title font-weight-bold">
+                                                    Rp{{ number_format($prd->harga, 0, ',', '.') }}</h6>
+                                                <a href="{{ url('produk_pembayaran') }}/{{ $prd->id_produk }}"
+                                                    class="btn btn-primary btn-block">Beli</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                        </form>
+
+
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
+
+    </div>
 
 
 

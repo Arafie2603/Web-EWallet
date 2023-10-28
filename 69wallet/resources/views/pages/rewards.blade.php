@@ -1,7 +1,5 @@
-@include('layouts.base')
+@extends('layouts.base')
 
 @section('content')
-
-dsdsds
-    
+   
 @endsection

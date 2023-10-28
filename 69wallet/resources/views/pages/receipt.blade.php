@@ -1,7 +1,7 @@
-@include('layouts.include.head')
+@extends('layouts.base2')
 
 
-@section('content')
+@section('content3')
     <main class="content" style="width: 500px; margin:auto;padding-top: 40px">
         <!-- Button trigger modal -->
 
@@ -66,13 +66,34 @@
                     </div>
 
                 </div>
-                <div class="d-flex justify-content-center mb-5">
-                    <a class="btn btn-primary" href="{{ url('dashboard_user') }}"><i class="fa-solid fa-utensils"></i>
-                        Pesan Lagi</a>
+                <form action="{{ url('dash_poin') }}" enctype="multipart/form-data" method="POST">
+                    <div class="d-flex justify-content-center mb-5">
+                        @if ($poin_achieve == 3)
+                            
+                        <input id="poin_achieve" name="poin_achieve"value="3"
+                            class="form-control w-25 mb-2" hidden>
 
-                </div>
+                            
+                        @endif
+                        <a class="btn btn-primary" value="{{ $poin_achieve }}" href="{{ url('dash_poin') }}"
+                            type="submit"><i class="fa-solid fa-utensils"></i>
+                            Pesan Lagi</a>
+
+                    </div>
+                </form>
 
         </div>
     </main>
 @endsection
-@include('layouts.include.footer')
+<script>
+    document.querySelector('.btn-primary').addEventListener('click', function (event) {
+        event.preventDefault(); // Mencegah tautan mengarahkan ke URL
+
+        var poinAchieve = document.getElementById('poin_achieve').value;
+
+        // Lakukan sesuatu dengan nilai poinAchieve, misalnya, kirimkan nilainya ke server dengan AJAX.
+        console.log(poinAchieve); // Anda dapat menampilkan nilainya di konsol untuk memeriksa
+
+        // Jika Anda ingin mengirim nilai ini ke server, Anda dapat menggunakan AJAX atau mengganti metode tautan menjadi POST seperti yang disarankan sebelumnya.
+    });
+</script>

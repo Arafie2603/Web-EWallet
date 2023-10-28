@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class TransaksiDetail extends Model
 {
     use HasFactory;
+    protected $table = "transaksi_details";
+    protected $primaryKey = "id_transaksi_detail";
+    protected $fillable = ['id_transaksi_detail','transaksi_id', 'produk_id', 'harga_satuan', 'jumlah'];
+    public $timestamps = true;
+    public $incrementing = false;
 
     public function transaksi()
     {

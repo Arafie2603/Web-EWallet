@@ -5,36 +5,45 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use \App\Models\User;
 use \App\Models\Akun;
+use App\Models\Transaksi;
+use App\Models\TransaksiDetail;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-
+        
         $user = User::with('akun')->find(Auth::user()->id);
-        $data_user = User::with('akun')->paginate(5);
-
         if ($user->role_id == 1) {
             $user = User::where('id', '=', Auth::user()->id)->firstOrFail();
             $userCount = User::count();
             $lastUser = User::latest()->first();
             $lastId = $lastUser->id;
+            $data_user = User::with('akun')->paginate(5);
+
             return view('admin.user', compact('user', 'data_user', 'lastId'));
-        } else {
-            return view('pages.dashboard', compact('user'));
-        }
+        } 
+
+        $transa = DB::table('transaksi_details')
+            ->select('*')
+            ->join('produks', 'produks.id_produk', '=', 'transaksi_details.produk_id')
+            ->join('transaksis', 'transaksis.id_transaksi', '=', 'transaksi_details.transaksi_id')
+            ->where('akun_id', '=', $user->akun->id_akun)
+            ->get('transaksi_details.*');
+
+        return view('pages.dashboard', compact('user', 'transa'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
     }
 
     /**
@@ -59,7 +68,7 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->password = bcrypt($request->password);
         $user->save(); // Simpan pengguna baru
-    
+
         // Buat entitas Akun yang terkait dengan pengguna
         $akun = new Akun();
         $akun->user_id = $request->id;
@@ -68,7 +77,8 @@ class UserController extends Controller
         $akun->no_telp = $request->no_telp;
         $akun->pengeluaran = 0;
 
-        $user->akun()->save($akun);$user->save();
+        $user->akun()->save($akun);
+        $user->save();
         return back()->with('success', 'Data Berhasil ditambah');
     }
 
@@ -102,7 +112,7 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
 
-        if($request->password_baru) {
+        if ($request->password_baru) {
             $user->password = bcrypt($request->password_baru);
         }
 
@@ -115,7 +125,7 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::where('id','=',$id)->firstOrFail();
+        $user = User::where('id', '=', $id)->firstOrFail();
         $user->delete();
         return back()->with('info', 'Data berhasil dihapus');
     }

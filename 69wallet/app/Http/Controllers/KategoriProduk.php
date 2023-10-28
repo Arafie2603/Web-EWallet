@@ -16,7 +16,8 @@ class KategoriProduk extends Controller
     public function index()
     {
         $kategori = Kategori::all();
-        return view('pages.kategori_produk', compact('kategori'));
+        $produk = Produk::all();
+        return view('pages.kategori_produk', compact('kategori', 'produk'));
     }
 
     /**

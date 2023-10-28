@@ -6,7 +6,7 @@ use App\Models\Akun;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 
@@ -29,6 +29,7 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
+        
         $ceklogin = $request->only('email', 'password');
         if (Auth::attempt($ceklogin)) {
 
@@ -43,9 +44,16 @@ class LoginController extends Controller
             ]);
             if($session->role_id == 1){
                 return redirect()->intended('admin/dashboard')->with('success', "Selamat Datang ". $session->name);
-            }else {
+            }else if($session->role_id == 0) {
                 $user = User::with('akun')->find(Auth::user()->id);
-                return view('pages.dashboard', compact('user'))->with('success', "Selamat Datang ". $session->nama);
+                $transa = DB::table('transaksi_details')
+                    ->select('*')
+                    ->join('produks', 'produks.id_produk', '=', 'transaksi_details.produk_id')
+                    ->join('transaksis', 'transaksis.id_transaksi', '=', 'transaksi_details.transaksi_id')
+                    ->where('akun_id', '=', $user->akun->id_akun)
+                    ->get('transaksi_details.*');
+        
+                return view('pages.dashboard', compact('user','transa'))->with('success', "Selamat Datang ". $session->nama);
             }
         } else {
             return Redirect::to('/')->with('message', 'email atau password salah');

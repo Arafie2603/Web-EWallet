@@ -48,28 +48,28 @@ class RegisterController extends Controller
 
         $password = Hash::make($request->password);
 
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = $password;
-        $user->role_id = 0;
-        $user->image = 'default.png';
-
-        $user->save();
-
-        $akun = new Akun();
-        $akun->user_id = $user->id;
-        $akun->no_telp = "0000";
-        $akun->poin = 0;
-        $akun->saldo = 0;
-        $akun->pengeluaran = 0;
-        $akun->save();  
-
+        
         try {
+            $user = new User();
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = $password;
+            $user->role_id = 0;
+            $user->image = 'default.png';
+    
+            $user->save();
+    
+            $akun = new Akun();
+            $akun->user_id = $user->id;
+            $akun->no_telp = "0000";
+            $akun->poin = 0;
+            $akun->saldo = 0;
+            $akun->pengeluaran = 0;
+            $akun->save();  
             return redirect()->to('/')->with('success', 'data berhasil ditambahkan');
         } catch (\Throwable $th) {
             //throw $th;
-            return redirect()->back()->with('error', 'data gagal ditambahkan');
+            return redirect()->back()->with('error', 'Data gagal ditambahkan, email sudah terdaftar');
         }
     }
 

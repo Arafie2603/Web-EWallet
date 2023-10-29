@@ -7,12 +7,8 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\ProdukController;
-use App\Http\Controllers\ProdukUserController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UserController;
-use App\Models\Kategori;
-use App\Models\User;
-use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\Route;
 
 use function PHPUnit\Framework\returnSelf;
@@ -28,8 +24,6 @@ use function PHPUnit\Framework\returnSelf;
 |
 */
 
-
-
 Route::group(['middleware' => 'NoAuth'], function() {
     Route::post('pendaftaran',[RegisterController::class,'store']);
     Route::get('pendaftaran',[RegisterController::class,'index']);
@@ -40,24 +34,24 @@ Route::group(['middleware' => 'NoAuth'], function() {
 });
 
 Route::group(['middleware' => ['auth', 'cekleveladmin'], 'prefix' => 'admin'], function(){
-    // Route::get('dashboard', 'App\Http\Controllers\DashboardAdminController@index')->name('dashboard');
     Route::resource('dashboard', AdminController::class);
     Route::resource('user', UserController::class);
-    // Route::get('user', [AdminController::class, 'userInfo'])->name('user.userInfo');
     Route::resource('produk', ProdukController::class);
     Route::resource('kategori', KategoriController::class);
-    // Route::get('/produk/{id}', [ProdukController::class, 'update']);
 });
 
 
 Route::group(['middleware' => 'auth', 'checkaccess'], function() {
+    Route::put('/top_up', [UserController::class, 'topup']);
+    Route::post('/top_up', [UserController::class, 'topup']);
     Route::resource('dashboard_user', UserController::class);
+    Route::post('/dashboard_user', [UserController::class, 'index']);
     Route::post('dash_poin', 'App\Http\Controllers\UserController@index');
     Route::get('dash_poin', 'App\Http\Controllers\UserController@index');
-    // Route::get('dash_poin', [UserController::class, 'index']);
     Route::get('/profile', [LoginController::class, 'profile'])->name('profile');
 
-    // Route::resource('kategori_produk', KategoriProduk::class);
+    Route::get('history', [UserController::class, 'history']);
+
     Route::resource('kategori_produk', KategoriProduk::class);
     Route::get('/reward', 'App\Http\Controllers\KategoriProduk@halreward')->name('reward');
     Route::get('produk_kategori/{id}', 'App\Http\Controllers\KategoriProduk@show')->name('produk_kategori.produk');

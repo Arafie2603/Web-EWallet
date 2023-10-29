@@ -80,11 +80,20 @@
         <div id="content">
 
             <!-- Topbar -->
-            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                @if (url())
-                    sasas
+            <nav class="navbar navbar-expand topbar mb-4 static-top shadow" style="color: #F7F4F4;">
+                @if (Route::current()->getName() == 'dashboard_user.index')
+                    <div class="text-primary font-weight-bold">Dashboard</div>
+                @elseif(Route::current()->getName() == 'kategori_produk.index')
+                    <div class="text-primary font-weight-bold">Produk</div>t
+                @elseif(Route::current()->getName() == 'reward')
+                    <div class="text-primary font-weight-bold">Reedem</div>
+                @elseif(Route::current()->getName() == 'generated::gvROPAWe7XUV1LQ2')
+                    <div class="text-primary font-weight-bold">Pembayaran</div>
+                @elseif(Route::current()->getName() == 'generated::Vj2fq1uMv5VmhvYQ')
+                    <div class="text-primary font-weight-bold">History Transaction</div>
                 @endif
-                sas
+                {{-- {{ dd(Route::current()->getName()) }} --}}
+
                 <!-- Sidebar Toggle (Topbar) -->
                 <button id="sidebarToggleTop" class="btn btn-dark bg-black d-md-none rounded-circle mr-3">
                     <i class="fa fa-bars" style="color: black;"></i>

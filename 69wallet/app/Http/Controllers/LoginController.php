@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Akun;
+use App\Models\Transaksi;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -17,11 +18,6 @@ class LoginController extends Controller
         return view('pages.login');
     }
 
-    public function daftar()
-    {
-        return view('pages.dashboard');
-    }
-
     public function profile()
     {
         return view('pages.profile');
@@ -29,34 +25,29 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        
-        $ceklogin = $request->only('email', 'password');
-        if (Auth::attempt($ceklogin)) {
+        try {
+            $ceklogin = $request->only('email', 'password');
+            if (Auth::attempt($ceklogin)) {
+                $session = User::all()->where('email', $request->email)->first();
 
-            $session = User::all()->where('email', $request->email)->first();
-
-            session([
-                'berhasil_login' => true,
-                'name' => $session->name,
-                'email' => $session->email,
-                'role_id' => $session->role_id,
-                'id_user' => $session->id
-            ]);
-            if($session->role_id == 1){
-                return redirect()->intended('admin/dashboard')->with('success', "Selamat Datang ". $session->name);
-            }else if($session->role_id == 0) {
-                $user = User::with('akun')->find(Auth::user()->id);
-                $transa = DB::table('transaksi_details')
-                    ->select('*')
-                    ->join('produks', 'produks.id_produk', '=', 'transaksi_details.produk_id')
-                    ->join('transaksis', 'transaksis.id_transaksi', '=', 'transaksi_details.transaksi_id')
-                    ->where('akun_id', '=', $user->akun->id_akun)
-                    ->get('transaksi_details.*');
-        
-                return view('pages.dashboard', compact('user','transa'))->with('success', "Selamat Datang ". $session->nama);
+                session([
+                    'berhasil_login' => true,
+                    'name' => $session->name,
+                    'email' => $session->email,
+                    'role_id' => $session->role_id,
+                    'id_user' => $session->id
+                ]);
+                if ($session->role_id == 1) {
+                    return redirect()->intended('admin/dashboard')->with('success', "Selamat Datang " . $session->name);
+                } else if ($session->role_id == 0) {
+                    $user = User::with('akun')->find(Auth::user()->id);
+                    $transa = new Transaksi();
+                    return redirect('/dashboard_user')->with(compact('user', 'transa'));
+                }
+            } else {
+                return Redirect::to('/')->with('message', 'email atau password salah');
             }
-        } else {
-            return Redirect::to('/')->with('message', 'email atau password salah');
+        } catch (\Throwable $th) {
         }
     }
 
@@ -108,8 +99,8 @@ class LoginController extends Controller
                 'image' => time() . '.' . $request->image->extension(),
             ]);
 
-            
-            
+
+
 
             return redirect()->back()->with('success', 'data berhasil diupdate');
         } catch (\Throwable $th) {

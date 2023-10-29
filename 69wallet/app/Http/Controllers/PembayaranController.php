@@ -41,7 +41,7 @@ class PembayaranController extends Controller
         // Join antara tabel akun dan transaksi sesuai dengan akun (user login)
         $akun = Akun::with('transaksis')->find($transaksi->akun_id);
         // $transaksi = Transaksi::with('transaksidetail')->find(Auth::user()->id);
-        $data = Carbon::now();
+        $data = Carbon::now('Asia/Jakarta');
 
         if ($request->payment == null) {
             return redirect()->back()->with('warning', 'silahkan pilih metode pembayaran terlebih dahulu');
@@ -63,16 +63,6 @@ class PembayaranController extends Controller
             $saldoBaruUser = $saldoUser - $hargaProduk;
             $harga = $hargaProduk;
             $user->akun->saldo = $saldoBaruUser;
-            if ($request->harga >= 5000 && $request->harga < 5000 && $request->payment == 'saldo') {
-                $poin_achieve = 1;
-                $user->akun->poin += $poin_achieve;
-            } else if ($request->harga >= 10000 && $request->harga < 10000 && $request->payment == 'saldo') {
-                $poin_achieve = 2;
-                $user->akun->poin += $poin_achieve;
-            } else if ($request->harga >= 20000 && $request->harga <= 20000 && $request->payment == 'saldo') {
-                $poin_achieve = 3;
-                $user->akun->poin += $poin_achieve;
-            }
             
         } else if ($request->payment == 'poin') {
 

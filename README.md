@@ -18,7 +18,7 @@ Tahapan run program :
 2. buat database baru
 3. pada file .env yang sudah di copas, ganti DB_DATABASE = laravel menjadi -> DB_DATABASE = (nama database yang dibuat)
 4. lakukan perintah berikut pada terminal dan jangan lupa masuk ke path project yang benar (69wallet) :
-   php artisan key:generate
-   php artisan migrate:fresh
-   php artisan db:seed
-   php artisan serve
+   a.   php artisan key:generate
+   b.   php artisan migrate:fresh
+   c.   php artisan db:seed
+   d.   php artisan serve

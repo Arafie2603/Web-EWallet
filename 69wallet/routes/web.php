@@ -4,7 +4,6 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\KategoriProduk;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\PagesController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\RegisterController;
@@ -53,6 +52,9 @@ Route::group(['middleware' => 'auth', 'checkaccess'], function() {
     Route::get('history', [UserController::class, 'history']);
 
     Route::resource('kategori_produk', KategoriProduk::class);
+    Route::put('/reedem', [KategoriProduk::class, 'reedem']);
+    Route::get('/reedem', [KategoriProduk::class, 'reedem']);
+    Route::post('/reedem', [KategoriProduk::class, 'reedem']);
     Route::get('/reward', 'App\Http\Controllers\KategoriProduk@halreward')->name('reward');
     Route::get('produk_kategori/{id}', 'App\Http\Controllers\KategoriProduk@show')->name('produk_kategori.produk');
 
@@ -61,6 +63,7 @@ Route::group(['middleware' => 'auth', 'checkaccess'], function() {
 
     Route::post('pembayaran', [PembayaranController::class, 'pembayaran'])->name('pembayaran.bayar');
     Route::post('receipt', [PembayaranController::class, 'receipt'])->name('receipt');
+    Route::get('detail_receipt/{id_transaksi_detail}', [PembayaranController::class, 'detail']);
 
     Route::put('update_profile', [LoginController::class, 'update_profile']);
     Route::post('update_profile', [LoginController::class, 'update_profile']);

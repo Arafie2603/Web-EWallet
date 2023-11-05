@@ -15,16 +15,18 @@ class CekLevelAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $level = $request->session()->get("role_user");
-        try {
-            if ($level == 1) {
-                return redirect()->intended('admin.dashboard');
-            } else if ($level == 0) {
-                return redirect()->intended('dashboard_user');
+        if (!$request->user()->isAdmin()) {
+            if ($request->is('admin/dashboard*')) {
+                // Jika pengguna bukan admin dan sedang di halaman admin dashboard, biarkan aksesnya ke sana
             }
-        } catch (\Throwable $th) {
-            return back()->with('error', 'Maaf akses anda ditolak');
+            return $next($request);
+            // Jika pengguna bukan admin, alihkan mereka ke dashboard admin
+            return redirect()->route('dashboard.index');
         }
-        return $next($request);
+        // $level = $request->session()->get("role_id");
+        // if ($level == 1) {
+        //     return redirect()->intended('admin.dashboard');
+        // } 
+        // return $next($request);
     }
 }

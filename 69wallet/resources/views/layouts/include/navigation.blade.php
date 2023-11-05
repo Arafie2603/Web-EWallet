@@ -27,7 +27,7 @@
 
             <li class="nav-item {{ request()->is('kategori_produk') ? 'active' : '' }}" style="color: black;">
                 <a class="nav-link" href="{{ route('kategori_produk.index') }}">
-                    <i style="color: black;" class="fas fa-fw fa-box"></i>
+                    <i style="color: black;" class="fas fa-fw fa-shopping-cart"></i>
                     <span style="color: black;"
                         class="{{ request()->is('kategori_produk') ? 'text-black' : '' }}">Produk</span></a>
             </li>
@@ -59,7 +59,7 @@
             </li>
             <li class="nav-item {{ request()->is('admin/produk') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('produk.index') }}">
-                    <i class="fas fa-fw fa-box" style="color : black;"></i>
+                    <i class="fas fa-fw fa-shopping-cart" style="color : black;"></i>
                     <span style="color:black;">Produk</span></a>
             </li>
         @endif

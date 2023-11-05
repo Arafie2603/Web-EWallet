@@ -25,29 +25,25 @@
                                             {{ str_pad('', 45, '=') }}
                                             <table>
                                                 <tr>
-                                                    <td>Tanggal</td>
-                                                    <td>: {{ $data->format('d M Y H:i:s') }}</td>
-                                                </tr>
-                                                <tr>
                                                     <td>OrderID</td>
-                                                    <td>: {{ $transaksi->id_transaksi }}</td>
+                                                    <td>: {{ $transaksiDetail[0]->transaksi_id }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Jumlah</td>
-                                                    <td>: {{ $transaksi->total_item }}</td>
+                                                    <td>: {{ $transaksiDetail[0]->total_item }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Reward</td>
-                                                    <td>: +{{ $poin }} poin</td>
+                                                    <td>: +{{ $transaksiDetail[0]->reward_poin }} poin</td>
                                                 </tr>
                                             </table>
                                             {{ str_pad('', 45, '=') }}
 
                                             <table style="width: 100%">
                                                 <tr>
-                                                    <td style="width: 40%">{{ $tranDetail->produk->nama_produk }}</td>
-                                                    <td style="width: 50%">{{ $tranDetail->jumlah }}</td>
-                                                    <td>Rp{{ number_format($tranDetail->harga_satuan * $tranDetail->jumlah) }}
+                                                    <td style="width: 40%">{{ $transaksiDetail[0]->nama_produk }}</td>
+                                                    <td style="width: 50%">{{ $transaksiDetail[0]->jumlah }}</td>
+                                                    <td>Rp{{ number_format($transaksiDetail[0]->harga_satuan * $transaksiDetail[0]->jumlah) }}
                                                     </td>
                                                 </tr>
 
@@ -56,7 +52,7 @@
                                             {{ str_pad('', 45, '=') }}
                                             <div class="d-flex justify-content-between">
                                                 <p>Total :</p>
-                                                <p>Rp.{{ number_format($transaksi->total_harga) }}</p>
+                                                <p>Rp.{{ number_format($transaksiDetail[0]->total_harga) }}</p>
                                             </div>
                                             <p class="text-center pt-5">Terimakasih dan semoga harimu menyenangkan!</p>
                                             {{-- <div class="d-flex justify-content-center">{!! DNS1D::getBarcodeHTML($transaksi->id_transaksi, 'C128', 3, 60) !!}</div> --}}

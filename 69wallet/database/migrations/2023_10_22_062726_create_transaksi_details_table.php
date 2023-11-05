@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('produk_id');
             $table->foreign('produk_id')->references('id_produk')->on('produks')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('harga_satuan');
+            $table->integer('reward_poin')->default(0);
             $table->integer('jumlah')->default(0);
             $table->timestamps();
         });

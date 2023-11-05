@@ -30,8 +30,25 @@ class KategoriProduk extends Controller
 
     public function halreward()
     {
-        
-        return view('pages.rewards');
+        $user = User::where('id', '=', Auth::user()->id)->firstOrFail(); 
+        $produk = Produk::all();  
+        // dd($produk); 
+        return view('pages.rewards', compact('user', 'produk'));
+    }
+
+    public function reedem(Request $request)
+    {
+
+        // dd($request->reedem);
+        $akun = User::with('akun')->find(Auth::user()->id);
+        $poinUser = $akun->akun->poin;
+        if ($poinUser < $request->reedem) {
+            return redirect()->back()->with('error', 'Maaf saldo anda tidak mencukupi, silahkan isi terlebih dahulu');
+        } 
+        $result_reedem = $poinUser - $request->reedem;
+        $akun->akun->poin = $result_reedem;
+        $akun->akun->save();
+        return back()->with('success', 'Anda berhasil melakukan reedem');
     }
 
     /**

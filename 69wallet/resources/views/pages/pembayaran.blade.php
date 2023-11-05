@@ -8,21 +8,21 @@
                     <div class="row d-flex justify-content-center pb-5">
                         <div class="col-md-7 col-xl-5 mb-4 mb-md-0">
                             @if (session('error'))
-                            <div class="alert alert-danger alert-dimissible show fade m-2">
-                                <div class="alert-body">
-                                    <button class="close" data-dismiss="alert"><span>x</span></button>
-                                    {{ session('error') }}
+                                <div class="alert alert-danger alert-dimissible show fade m-2">
+                                    <div class="alert-body">
+                                        <button class="close" data-dismiss="alert"><span>x</span></button>
+                                        {{ session('error') }}
+                                    </div>
                                 </div>
-                            </div>
-                        @endif
-                        @if (session('warning'))
-                            <div class="alert alert-warning alert-dimissible show fade m-2">
-                                <div class="alert-body">
-                                    <button class="close" data-dismiss="alert"><span>x</span></button>
-                                    {{ session('warning') }}
+                            @endif
+                            @if (session('warning'))
+                                <div class="alert alert-warning alert-dimissible show fade m-2">
+                                    <div class="alert-body">
+                                        <button class="close" data-dismiss="alert"><span>x</span></button>
+                                        {{ session('warning') }}
+                                    </div>
                                 </div>
-                            </div>
-                        @endif
+                            @endif
                             <div class="py-4 d-flex flex-row">
                                 <h5><span class="far fa-check-square pe-2"></span><b>69Wallet</b> |</h5>
                                 <span class="ps-2">Pay</span>
@@ -90,7 +90,7 @@
 
                         <div class="col-md-5 col-xl-4 offset-xl-1">
                             <div class="py-4 d-flex justify-content-end">
-                                <h6><a href="{{route('dashboard_user.index')}}">Cancel and return to website</a></h6>
+                                <h6><a href="{{ route('dashboard_user.index') }}">Cancel and return to website</a></h6>
                             </div>
                             <div class="rounded d-flex flex-column border" style="background-color: #f8f9fa;">
                                 <img class="rounded-top" src="{{ asset('storage/storage/' . $produk->foto_produk) }}"

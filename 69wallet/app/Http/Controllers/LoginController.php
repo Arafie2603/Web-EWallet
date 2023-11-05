@@ -1,14 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\Akun;
 use App\Models\Transaksi;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redirect;
+
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
@@ -25,31 +21,29 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        try {
-            $ceklogin = $request->only('email', 'password');
-            if (Auth::attempt($ceklogin)) {
-                $session = User::all()->where('email', $request->email)->first();
+        $ceklogin = $request->only('email', 'password');
+        if(Auth::attempt($ceklogin)) {
+            $session = User::all()->where('email', $request->email)->first();
+            session([
+                'berhasil_login' => true,
+                'name' => $session->name,
+                'email' => $session->email,
+                'role_id' => $session->role_id,
+                'id_user' => $session->id
+            ]);
 
-                session([
-                    'berhasil_login' => true,
-                    'name' => $session->name,
-                    'email' => $session->email,
-                    'role_id' => $session->role_id,
-                    'id_user' => $session->id
-                ]);
-                if ($session->role_id == 1) {
-                    return redirect()->intended('admin/dashboard')->with('success', "Selamat Datang " . $session->name);
-                } else if ($session->role_id == 0) {
-                    $user = User::with('akun')->find(Auth::user()->id);
-                    $transa = new Transaksi();
-                    return redirect('/dashboard_user')->with(compact('user', 'transa'));
-                }
-            } else {
-                return Redirect::to('/')->with('message', 'email atau password salah');
+            if ($session->role_id == 1) {
+                return redirect()->intended('admin/dashboard');
+            }else {
+                $user = User::with('akun')->find(Auth::user()->id);
+                $transa = new Transaksi();
+                return redirect('/dashboard_user')->with(compact('user', 'transa'));
             }
-        } catch (\Throwable $th) {
+        }else {
+            return redirect()->to('/')->with('message', 'Email atau password salah');
         }
     }
+
 
     public function update_profile(Request $request)
     {

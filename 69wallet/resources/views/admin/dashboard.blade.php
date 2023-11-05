@@ -3,9 +3,9 @@
 @section('content')
     {{-- =================ADMIN============== --}}
     <div class="container-fluid">
-
+        {{-- {{ Route::current()->getName() }} --}}
         <!-- Page Heading -->
-        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <div class="d-sm-flex align-items-center justify-content-betwween mb-4">
             <h1 class="h3 mb-0 text-gray-800">Hai, {{ session('name') }}</h1>
         </div>
 

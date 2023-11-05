@@ -5,9 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use \App\Models\User;
 use \App\Models\Akun;
-use Carbon\Carbon;
-use DateTime;
-use Dflydev\DotAccessData\Data;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -19,7 +16,6 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        // Info halaman admin
         $user = User::with('akun')->find(Auth::user()->id);
         if ($user->role_id == 1) {
             $user = User::where('id', '=', Auth::user()->id)->firstOrFail();
@@ -27,9 +23,10 @@ class UserController extends Controller
             $lastUser = User::latest()->first();
             $lastId = $lastUser->id;
             $data_user = User::with('akun')->paginate(5);
-
             return view('admin.user', compact('user', 'data_user', 'lastId'));
+            // return redirect()->route('user.index', compact('user', 'data_user', 'lastId'));
         }
+
         $transa = DB::table('transaksi_details')
             ->select('*')
             ->join('produks', 'produks.id_produk', '=', 'transaksi_details.produk_id')
@@ -37,58 +34,43 @@ class UserController extends Controller
             ->where('akun_id', '=', $user->akun->id_akun)
             ->orderBy('transaksi_details.created_at', 'desc')
             ->paginate(3);
-        
+
         try {
 
-            $finalPoin = [];
+            $finalPoin = array();
+            $date = [];
+
+            $get_poin = $request->session()->get('poin');
             foreach ($transa as $tr) {
-                $poin = 0;
-                $harga = $tr->harga_satuan;
-                switch (true) {
-                    case $harga >= 5000 && $harga < 10000:
-                        $poin += 1;
-                        break;
-                    case $harga >= 10000 && $harga < 15000:
-                        $poin += 2;
-                        break;
-                    case $harga >= 15000 && $harga < 20000:
-                        $poin += 3;
-                        break;
-                    case $harga >= 20000 && $harga < 25000:
-                        $poin += 4;
-                        break;
-                    case $harga >= 25000 && $harga < 30000:
-                        $poin += 5;
-                        break;
-                    case $harga >= 30000 && $harga < 35000:
-                        $poin += 6;
-                        break;
-    
-                    default:
-                }
-                array_push($finalPoin, $poin);
+                $created_at = $tr->created_at;
+                $get_poin;
+                $formated = substr($created_at, 5, -12);
+                $formated = date("F", mktime(0, 0, 0, $formated, 10));
+
+                // GET year and date
+                $formattedDate = substr($created_at, 8, -9);
+
+                // GET year
+                $formatedYear = substr($created_at, 0, -15);
+
+                $date2 = ($formated . ',' . $formattedDate . ' ' . $formatedYear);
+                array_push($date, $date2);
+                array_push($finalPoin, $get_poin);
             }
         } catch (\Throwable $th) {
-            $finalPoin = 0;
+            $finalPoin = '';
+            $date = '';
+            $poin = 0;
         }
-
         // dd($finalPoin);
-        // Convert month number to month name
-        try {
-            $created_at = $transa[0]->created_at;
-            $formated = Carbon::parse($created_at)->format('d-m-Y');
-            $formattedDate = Carbon::createFromFormat('d-m-Y', $formated)->format('F j, Y');
-        } catch (\Throwable $th) {
-            $formattedDate = 'null';
-        }
-
-        $user->akun->poin += $poin;
+        // dd($date);
+        // $user->akun->poin += $poin;
         $user->akun->save();
 
-
-
-        return view('pages.dashboard', compact('user', 'transa', 'finalPoin', 'formattedDate'));
+        return view('pages.dashboard', compact('user', 'transa', 'finalPoin', 'date'));
     }
+
+    // History Page
 
     public function history()
     {
@@ -101,54 +83,36 @@ class UserController extends Controller
             ->orderBy('transaksi_details.created_at', 'desc')
             ->get('transaksi_details.*');
 
-            try {
+        try {
 
-                $finalPoin = [];
-                foreach ($transaAll as $tr) {
-                    $poin = 0;
-                    $harga = $tr->harga_satuan;
-                    switch (true) {
-                        case $harga >= 5000 && $harga < 10000:
-                            $poin += 1;
-                            break;
-                        case $harga >= 10000 && $harga < 15000:
-                            $poin += 2;
-                            break;
-                        case $harga >= 15000 && $harga < 20000:
-                            $poin += 3;
-                            break;
-                        case $harga >= 20000 && $harga < 25000:
-                            $poin += 4;
-                            break;
-                        case $harga >= 25000 && $harga < 30000:
-                            $poin += 5;
-                            break;
-                        case $harga >= 30000 && $harga < 35000:
-                            $poin += 6;
-                            break;
-        
-                        default:
-                    }
-                    array_push($finalPoin, $poin);
-                }
-            } catch (\Throwable $th) {
-                $finalPoin = 0;
+            $finalPoin = [];
+            $date = [];
+            foreach ($transaAll as $tr) {
+                $created_at = $tr->created_at;
+                $poin = 0;
+                $harga = $tr->harga_satuan;
+
+
+                $formated = substr($created_at, 5, -12);
+                $formated = date("F", mktime(0, 0, 0, $formated, 10));
+
+                // GET year and date
+                $formattedDate = substr($created_at, 8, -9);
+
+                // GET year
+                $formatedYear = substr($created_at, 0, -15);
+
+                $date2 = ($formated . ',' . $formattedDate . ' ' . $formatedYear);
+                array_push($finalPoin, $poin);
+                array_push($date, $date2);
             }
-    
-            // dd($finalPoin);
-            // Convert month number to month name
-            try {
-                $created_at = $transaAll[0]->created_at;
-                $formated = Carbon::parse($created_at)->format('d-m-Y');
-                $formattedDate = Carbon::createFromFormat('d-m-Y', $formated)->format('F j, Y');
-            } catch (\Throwable $th) {
-                $formattedDate = 'null';
-            }
-    
-            $user->akun->poin += $poin;
-            $user->akun->save();
-    
-        return view('pages.history', compact('transaAll', 'user', 'finalPoin', 'formattedDate'));
+        } catch (\Throwable $th) {
+            $finalPoin = '';
+            $date = '';
+            $poin = 0;
+        }
+
+        return view('pages.history', compact('transaAll', 'user', 'finalPoin', 'date'));
     }
 
     public function topup(Request $request)

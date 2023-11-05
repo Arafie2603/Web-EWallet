@@ -44,6 +44,7 @@
                     <h1 class="h4 text-gray-900 mb-4 font-weight-bold">WELCOME BACK !</h1>
                     <div>Dont have an account, <a href="{{ url('/pendaftaran') }}">Sign up</a></div>
                 </div>
+                {{-- {{ dd(url('daftar')) }} --}}
                 <form method="POST" action="{{ url('daftar') }}" enctype="multipart/form-data" class="user">
                     @csrf
                     <div class="form-group w-80">

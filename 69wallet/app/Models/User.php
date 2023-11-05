@@ -17,6 +17,10 @@ class User extends Model implements Authenticatable
         'email',
         'password',
     ];
+    public function isAdmin()
+    {
+        return $this->role_id === 1; // Menggunakan kolom role untuk menandai status admin
+    }
 
     public function accounts()
     {

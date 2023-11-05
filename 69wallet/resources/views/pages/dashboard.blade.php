@@ -61,36 +61,35 @@
                 </div>
             </div>
             <!-- Earnings (Monthly) Card Example -->
-            <div class="col-xl-4 col-md-6 mb-4 mt-2">
-                <div class="card border-left-success shadow h-100 py-2">
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="card border-left-success shadow py-2 h-150">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-
                                 <div class="text-xs font-weight-bold text-success mb-4">
-                                    <h4 class="font-weight-bold">Poin</h4>
+                                    <h4 class="font-weight-bold" style="">Poin</h4>
                                 </div>
-                                @if ($user->akun->poin == 0)
+                                {{-- 
+                                @if ($user->akun->saldo == 0)
                                     <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                        0
+                                        Rp. {{ number_format(0, 0, ',', '.') }}
                                     </div>
-                                @else
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                        {{ $user->akun->poin }}
-                                    </div>
-                                @endif
-
+                                @else --}}
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    {{ $user->akun->poin }}
+                                </div>
+                                {{-- @endif --}}
 
 
                             </div>
                             {{-- <div class="col-auto">
-                                <i class="fas fa-donate fa-2x text-gray-300"></i>
+                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                             </div> --}}
                         </div>
                     </div>
                 </div>
             </div>
-            <div class=" h-100">
+            <div class="h-100">
 
                 <div class="card-body">
                     {{-- ===== AWALAN FORM ===== --}}
@@ -98,7 +97,6 @@
                     <table class="table table-borderless" id="dataTable" width="100%" cellspacing="0">
 
                         <div class="card-body">
-                            <thead>
                                 <div class="d-flex align-items-center">
                                     <h5 class="text-decoration-none card-title text-dark font-weight-bold mr-auto">Recent Transaction</h5>
                                     <a href="{{ url('history') }}" class="btn-btn mb-3 text-decoration-none">
@@ -108,23 +106,27 @@
                                         <span class="text-dark pr-4">View all <i class="fas fa-chevron-right"></i></span>
                                     </a>
                                 </div>
-
-                                <tr>
-
-                                </tr>
-                            </thead>
                             <tbody>
+                                {{-- {{ dd($transa[0]) }} --}}
+                                @if ($transa[0] == null)
+                                <th class="text-light">Image</th>                            
+                                <th class="text-light">Nama produk</th>                            
+                                <th class="text-light">Date</th>                            
+                                <th class="text-light">No telp</th>                            
+                                <th class="text-light">Harga</th>                            
+                                @endif
                                 @foreach ($transa as $index => $td)
                                     <tr>
                                         <td><img src="{{ asset('storage/storage/' . $td->foto_produk) }}"
                                                 class="img-thumbnail" width="100" height="100" alt=""></td>
                                         <td>{{ $td->nama_produk }}</td>
-                                        <td>{{ $formattedDate }}</td>
+                                        <td>{{ $date[$index] }}</td>
                                         <td>{{ $user->akun->no_telp }}</td>
                                         <td>-Rp{{ number_format($td->harga, 0, ',', '.') }}</td>
-                                        <td>+{{ $finalPoin[$index] }}</td>
-
+                                        <td>+{{ $td->reward_poin }}</td>
                                         <td>{{ $td->status }}</td>
+                                        <td>  <a href="{{ url('detail_receipt') }}/{{ $td->id_transaksi_detail }}"
+                                            class="">Receipt</a></td>
                                     </tr>
                                 @endforeach
                             </tbody>

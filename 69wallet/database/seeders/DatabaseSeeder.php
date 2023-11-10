@@ -41,11 +41,9 @@ class DatabaseSeeder extends Seeder
         Akun::create([
             'user_id' => 2,
             'no_telp' => "0899989",
-            'poin' => 10,
-            'saldo' => 10000,
+            'poin' => 10000,
+            'saldo' => 50000.00,
             'pengeluaran' => 0
         ]);
-
-
     }
 }

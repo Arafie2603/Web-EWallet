@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreign('akun_id')->references('id_akun')->on('akuns');
             $table->integer('total_item')->default(0);
             $table->integer('total_harga')->default(0);
+            $table->string('noTelp');
             $table->string('status')->nullable()->default('aktif');
             $table->timestamps();
         });

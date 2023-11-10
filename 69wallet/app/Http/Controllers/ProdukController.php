@@ -5,13 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Produk;
 use Illuminate\Http\Request;
 use \App\Models\Kategori;
-use App\Models\Transaksi;
-use App\Models\TransaksiDetail;
 use \App\Models\User;
-use Carbon\Carbon;
-use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\DB;
 class ProdukController extends Controller
 {
     /**
@@ -24,7 +20,6 @@ class ProdukController extends Controller
         $user = User::where('id', '=', Auth::user()->id)->firstOrFail();
         $lastId = Produk::latest()->value('id_produk');
 
-        
         return view('admin.produk', compact('kategori', 'produk', 'user', 'lastId'));
     }
 
@@ -38,15 +33,16 @@ class ProdukController extends Controller
 
     public function bayar(Request $request, string $id)
     {
-        // produk = Produk::where('kategori_id', $id )->get();
-        // $kategori = Kategori::where('id_kategori', $id)->firstorfail();
-        // // @dd($transaksidetail->p);
-        // $data_kategori = Kategori::all();
         $user = User::with('akun')->find(Auth::user()->id);
         $produk =  Produk::where('id_produk', $id)->first();
-        // $tranDetail = TransaksiDetail::with('produk')->where('produk_id', $request->id_produk)->first();
+        $redtail = DB::table('reward_details')
+        ->select('*')
+        ->join('akuns', 'akuns.id_akun', '=', 'reward_details.akun_id')
+        ->join('rewards', 'rewards.id_reward', '=', 'reward_details.reward_id')
+        ->where('akun_id', '=', $user->akun->id_akun)
+        ->get('reward_details.*');
         $prokat = Produk::with('kategori')->where('kategori_id', $produk->id_produk)->first();
-        return view('pages.pembayaran', compact('produk', 'prokat', 'user'));
+        return view('pages.pembayaran', compact('produk', 'prokat', 'user', 'redtail'));
 
     }
 
@@ -55,23 +51,30 @@ class ProdukController extends Controller
      */
     public function store(Request $request)
     {
-        $produk = new Produk();
-        $jumlah = Produk::count();
-        $produk->kategori_id = $request->kategori_id;
-        $produk->nama_produk = $request->nama_produk;
-        $produk->kode_produk= "PR".str_pad($jumlah+1, 5, '0', STR_PAD_LEFT);
-        $produk->harga = $request->harga;
-        $produk->poin = $request->poin;
-        $produk->status = $request->status;
-
-        if ($request->hasFile('foto_produk')) {
-            $image = $request->file('foto_produk');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->storeAs('public/storage', $imageName);
-            $produk->foto_produk = '/' . $imageName;
+        try {
+            $produk = new Produk();
+            $jumlah = Produk::count();
+            // dd($jumlah);
+            $produk->kategori_id = $request->kategori_id;
+            $produk->nama_produk = $request->nama_produk;
+            $produk->kode_produk= "PR".str_pad($jumlah+1, 5, '0', STR_PAD_LEFT);
+            // dd($produk->kode_produk);
+            $produk->harga = $request->harga;
+            $produk->poin = $request->poin;
+            $produk->status = $request->status;
+    
+            if ($request->hasFile('foto_produk')) {
+                $image = $request->file('foto_produk');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->storeAs('public/storage', $imageName);
+                $produk->foto_produk = '/' . $imageName;
+            }
+    
+            $produk->save();
+        } catch (\Throwable $th) {
+            $produk->kode_produk= "PR".str_pad($jumlah+1, 5, '0', STR_PAD_LEFT);
+            return back()->with('error', 'Data gagal ditambahkan');
         }
-
-        $produk->save();
         return back()->with('success', 'Data berhasil ditambah');
 
     }
@@ -105,12 +108,11 @@ class ProdukController extends Controller
             $image->storeAs('public/storage', $imageName);
             $produk->foto_produk = '/' . $imageName;
         }
-
         $produk->poin = $request->poin;
         $produk->harga = $request->harga;
         $produk->status = $request->status;
-
         $produk->save();  
+        
         return back()->with('warning', 'Data berhasil diubah');      
     }
 
@@ -119,6 +121,8 @@ class ProdukController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $produk = Produk::where('id_produk','=',$id)->firstOrFail();
+        $produk->delete();
+        return back()->with('error', 'Data berhasil dihapus');
     }
 }

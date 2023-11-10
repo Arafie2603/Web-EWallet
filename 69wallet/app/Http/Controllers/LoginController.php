@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -21,26 +22,31 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        $ceklogin = $request->only('email', 'password');
-        if(Auth::attempt($ceklogin)) {
+        try {
+            $ceklogin = $request->only('email', 'password');
+        if (Auth::attempt($ceklogin)) {
             $session = User::all()->where('email', $request->email)->first();
             session([
                 'berhasil_login' => true,
                 'name' => $session->name,
                 'email' => $session->email,
+                'image' => $session->image,
                 'role_id' => $session->role_id,
                 'id_user' => $session->id
             ]);
 
             if ($session->role_id == 1) {
                 return redirect()->intended('admin/dashboard');
-            }else {
+            } else {
                 $user = User::with('akun')->find(Auth::user()->id);
                 $transa = new Transaksi();
                 return redirect('/dashboard_user')->with(compact('user', 'transa'));
             }
-        }else {
-            return redirect()->to('/')->with('message', 'Email atau password salah');
+        } else {
+            return redirect()->to('/')->with('error', 'Email atau password salah');
+        }
+        } catch (\Throwable $th) {
+            return back()->with('error', 'Ada kesalahan dalam progra');
         }
     }
 
@@ -60,49 +66,31 @@ class LoginController extends Controller
 
         ]);
 
-        try {
-            User::where('id', session()->get('id'))->update([
-                'name'  =>  $request->name,
-                'email' => $request->email,
-            ]);
-            $user = User::find(session('id'));
-            // $id = session()->get('id');
 
-            $result = User::where('id', session()->get('id'))->first();
+        try {
+
+            $user = User::select('*')
+                ->where('id', '=', Auth::user()->id)
+                ->get();
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $imageName = time() . '.' . $image->getClientOriginalExtension();
                 $image->storeAs('public/storage', $imageName);
-                $user->image = 'storage/' . $imageName;
+                $user[0]->image = '/' . $imageName;
             }
-
-            $user->save();
-
+            $user[0]->name = $request->name;
+            $user[0]->email = $request->email;
+            $user[0]->save();    
             session([
-                'name' => $user->name,
-                'email' => $user->email,
-                'image' => $user->image,
+                'image' => $user[0]->image,
+                'name' => $user[0]->name,
+                'email' => $user[0]->email
             ]);
-
-            session()->forget('name');
-            session()->forget('email');
-            session()->forget('image');
-            session([
-                'name'  =>  $result->name,
-                'email' =>  $result->email,
-                'image' => time() . '.' . $request->image->extension(),
-            ]);
-
-
-
-
-            return redirect()->back()->with('success', 'data berhasil diupdate');
+            return redirect()->back()->with('success', 'data berhasil ditambahkan');
         } catch (\Throwable $th) {
-            return redirect()->back()->with('error', 'data gagal diupdate');
+            return redirect()->back()->with('error', 'data gagal ditambahkan');
         }
     }
-
-
 
     public function logout(Request $request)
     {

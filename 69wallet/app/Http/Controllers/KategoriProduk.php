@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
 use \App\Models\Produk;
+use App\Models\Reward;
+use App\Models\RewardDetail;
 use \App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class KategoriProduk extends Controller
 {
@@ -15,9 +18,10 @@ class KategoriProduk extends Controller
      */
     public function index()
     {
+        $user = User::with('akun')->find(Auth::user()->id);
         $kategori = Kategori::all();
         $produk = Produk::all();
-        return view('pages.kategori_produk', compact('kategori', 'produk'));
+        return view('pages.kategori_produk', compact('kategori', 'produk', 'user'));
     }
 
     /**
@@ -31,22 +35,29 @@ class KategoriProduk extends Controller
     public function halreward()
     {
         $user = User::where('id', '=', Auth::user()->id)->firstOrFail(); 
-        $produk = Produk::all();  
+        $reward = Reward::all();  
         // dd($produk); 
-        return view('pages.rewards', compact('user', 'produk'));
+        return view('pages.rewards', compact('user', 'reward'));
     }
 
     public function reedem(Request $request)
     {
-
         // dd($request->reedem);
         $akun = User::with('akun')->find(Auth::user()->id);
+        $rewardDetail = new RewardDetail();
         $poinUser = $akun->akun->poin;
         if ($poinUser < $request->reedem) {
-            return redirect()->back()->with('error', 'Maaf saldo anda tidak mencukupi, silahkan isi terlebih dahulu');
+            $rewardDetail->status = 'gagal';
+            return redirect()->back()->with('error', 'Maaf poin anda tidak mencukupi, silahkan isi terlebih dahulu');
         } 
         $result_reedem = $poinUser - $request->reedem;
         $akun->akun->poin = $result_reedem;
+
+        $rewardDetail->status = 'tidak terpakai';
+        $rewardDetail->reward_id = $request->id_reward;
+        $rewardDetail->akun_id = $akun->akun->id_akun;
+        $rewardDetail->save();
+
         $akun->akun->save();
         return back()->with('success', 'Anda berhasil melakukan reedem');
     }

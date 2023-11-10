@@ -61,7 +61,7 @@ class RegisterController extends Controller
     
             $akun = new Akun();
             $akun->user_id = $user->id;
-            $akun->no_telp = "0000";
+            $akun->no_telp = '';
             $akun->poin = 0;
             $akun->saldo = 0;
             $akun->pengeluaran = 0;

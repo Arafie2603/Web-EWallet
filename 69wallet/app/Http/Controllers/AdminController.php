@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Akun;
+use App\Models\Produk;
+use App\Models\Reward;
 use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -13,6 +14,16 @@ class AdminController extends Controller
      */
     public function index()
     {
+        $users = Akun::count();
+        $produk = Produk::count();
+        $reward = Reward::count();
+        session([
+            'jumlah_user' => $users,
+            'jumlah_produk' =>$produk,
+            'jumlah_reward' => $reward
+        ]);
+
+
         
         return view('admin.dashboard');
     }

@@ -22,4 +22,12 @@ class Akun extends Model
     {
         return $this->hasMany(Transaksi::class);
     }
+    public function rewarddetail()
+    {
+        return $this->hasMany(RewardDetail::class, 'akun_id', 'id_akun');
+    }
+    public function reward()
+    {
+        return $this->hasMany(Reward::class, 'akun_id', 'id_akun');
+    }
 }

@@ -18,9 +18,6 @@
                                     <div class="card shadow">
                                         <div class="card-body">
                                             <h1 class="text-center">69 Wallet</h1>
-                                            <p class="text-center">Jl. Taman Melati, Bekasi, West Java
-                                                <br>(021)8475937582
-                                            </p>
                                             <p class="text-center"></p>
                                             {{ str_pad('', 45, '=') }}
                                             <table>
@@ -34,7 +31,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td>Jumlah</td>
-                                                    <td>: {{ $transaksi->total_item }}</td>
+                                                    <td>: {{ $transaksi->total_item }}SKU</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Reward</td>
@@ -46,9 +43,17 @@
                                             <table style="width: 100%">
                                                 <tr>
                                                     <td style="width: 40%">{{ $tranDetail->produk->nama_produk }}</td>
-                                                    <td style="width: 50%">{{ $tranDetail->jumlah }}</td>
-                                                    <td>Rp{{ number_format($tranDetail->harga_satuan * $tranDetail->jumlah) }}
+                                                    <td style="width: 50%"></td>
+                                                    <td>Rp{{ number_format($transaksiDetail->harga_satuan) }}
                                                     </td>
+                                                </tr>
+                                                <tr>
+                                                    @if ($result)
+                                                    <td style="width: 60%">Voucher {{ $reward[0]->nama_reward }}</td>
+                                                    <td style="width: 30%"></td>
+                                                    <td>-Rp{{ number_format($discount) }}
+                                                    </td>
+                                                    @endif
                                                 </tr>
 
                                             </table>
@@ -58,7 +63,7 @@
                                                 <p>Total :</p>
                                                 <p>Rp.{{ number_format($transaksi->total_harga) }}</p>
                                             </div>
-                                            <p class="text-center pt-5">Terimakasih dan semoga harimu menyenangkan!</p>
+                                            <p class="text-center pt-5">Transaksi anda berhasil !</p>
                                             {{-- <div class="d-flex justify-content-center">{!! DNS1D::getBarcodeHTML($transaksi->id_transaksi, 'C128', 3, 60) !!}</div> --}}
                                             <p class="text-center pt-3"></p>
 
@@ -75,8 +80,8 @@
                     <div class="d-flex justify-content-center mb-5">
                         <input id="poin_achieve" name="poin_achieve"value="3" class="form-control w-25 mb-2" hidden>
                         <a class="btn btn-primary" value="" href="{{ url('dash_poin') }}"
-                            type="submit"><i class="fa-solid fa-utensils"></i>
-                            Pesan Lagi</a>
+                            type="submit"><i class="fas fa-home"></i>
+                            Kembali ke halaman utama</a>
                     </div>
                 </form>
 

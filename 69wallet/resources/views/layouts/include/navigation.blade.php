@@ -3,15 +3,12 @@
 
     <!-- Sidebar -->
     <ul class="navbar-nav bg-light sidebar sidebar-dark accordion" id="accordionSidebar">
-
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
             <div class="sidebar-brand-icon">
-                <img src="{{ asset('assets/logo.png') }}" alt="">
+                <img src="{{ asset('assets/69wallet.png') }}" width="125px" alt="">
             </div>
-            <div class="sidebar-brand-text mx-3 text-primary">69 Wallet</div>
         </a>
-
         <!-- Divider -->
         <hr class="sidebar-divider my-0">
 
@@ -62,6 +59,11 @@
                     <i class="fas fa-fw fa-shopping-cart" style="color : black;"></i>
                     <span style="color:black;">Produk</span></a>
             </li>
+            <li class="nav-item {{ request()->is('admin/rewards') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('rewards.index') }}">
+                    <i class="fas fa-fw fa-medal" style="color : black;"></i>
+                    <span style="color:black;">Rewards</span></a>
+            </li>
         @endif
 
         <!-- Divider -->
@@ -81,16 +83,30 @@
 
             <!-- Topbar -->
             <nav class="navbar navbar-expand topbar mb-4 static-top shadow" style="color: #F7F4F4;">
-                @if (Route::current()->getName() == 'dashboard_user.index')
-                    <div class="text-primary font-weight-bold">Dashboard</div>
-                @elseif(Route::current()->getName() == 'kategori_produk.index')
-                    <div class="text-primary font-weight-bold">Produk</div>t
-                @elseif(Route::current()->getName() == 'reward')
-                    <div class="text-primary font-weight-bold">Reedem</div>
-                @elseif(Route::current()->getName() == 'generated::gvROPAWe7XUV1LQ2')
-                    <div class="text-primary font-weight-bold">Pembayaran</div>
-                @elseif(Route::current()->getName() == 'generated::Vj2fq1uMv5VmhvYQ')
-                    <div class="text-primary font-weight-bold">History Transaction</div>
+                @if (Auth::user()->role_id == 1)
+                    @if (request()->path() == 'admin/dashboard')
+                        <div class="text-primary font-weight-bold">Dashboard</div>
+                    @elseif(request()->path() == 'admin/produk')
+                        <div class="text-primary font-weight-bold">Produk</div>t
+                    @elseif(request()->path() == 'admin/rewards')
+                        <div class="text-primary font-weight-bold">Reedem</div>
+                    @elseif(request()->path() == 'admin/kategori')
+                        <div class="text-primary font-weight-bold">Kategori</div>
+                    @elseif(request()->path() == 'admin/user')
+                        <div class="text-primary font-weight-bold">User</div>
+                    @endif
+                @elseif(Auth::user()->role_id == 0)
+                    @if (Route::current()->getName() == 'dashboard_user.index')
+                        <div class="text-primary font-weight-bold">Dashboard</div>
+                    @elseif(Route::current()->getName() == 'kategori_produk.index')
+                        <div class="text-primary font-weight-bold">Produk</div>t
+                    @elseif(Route::current()->getName() == 'reward')
+                        <div class="text-primary font-weight-bold">Reedem</div>
+                    @elseif(request()->path() == 'profile')
+                        <div class="text-primary font-weight-bold">Profile</div>
+                    @elseif(Route::current()->getName() == 'generated::Vj2fq1uMv5VmhvYQ')
+                        <div class="text-primary font-weight-bold">History Transaction</div>
+                    @endif
                 @endif
                 {{-- {{ dd(Route::current()->getName()) }} --}}
 
@@ -113,7 +129,8 @@
                             <form class="form-inline mr-auto w-100 navbar-search">
                                 <div class="input-group">
                                     <input type="text" class="form-control bg-light border-0 small"
-                                        placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                                        placeholder="Search for..." aria-label="Search"
+                                        aria-describedby="basic-addon2">
                                     <div class="input-group-append">
                                         <button class="btn btn-primary" type="button">
                                             <i class="fas fa-search fa-sm"></i>

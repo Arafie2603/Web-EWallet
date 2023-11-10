@@ -100,18 +100,22 @@ class PembayaranController extends Controller
             ->where('id_reward_detail', '=', $request->id_reward)
             ->where('status', '=', 'tidak terpakai')
             ->get('reward_details.*');
-        if($result == true) {
-            // dd($request->id_reward);
-            
-            // dd($reward);
-            $discount = intval($reward[0]->nilai_reward * $hargaProduk);
-            $harga = $hargaProduk - $discount;
-            $saldoBaruUser = $saldoUser - $hargaProduk;
-            $user->akun->saldo = $saldoBaruUser;
-            session([
-                'total_harga' => $harga
-            ]);
-            DB::table('reward_details')->where('id_reward_detail', '=', $result)->update(array('status' => 'terpakai'));
+        try {
+            if($result == true) {
+                // dd($request->id_reward);
+                
+                // dd($reward);
+                $discount = intval($reward[0]->nilai_reward * $hargaProduk);
+                $harga = $hargaProduk - $discount;
+                $saldoBaruUser = $saldoUser - $hargaProduk;
+                $user->akun->saldo = $saldoBaruUser;
+                session([
+                    'total_harga' => $harga
+                ]);
+                DB::table('reward_details')->where('id_reward_detail', '=', $result)->update(array('status' => 'terpakai'));
+            }
+        } catch (\Throwable $th) {
+            return back()->with('error', 'Anda mencoba refresh web, silahkan melakukan pembayaran ulang terlebih dahulu');
         }
 
         $user->akun->save();

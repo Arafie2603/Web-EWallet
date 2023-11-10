@@ -24,8 +24,7 @@
                                 </div>
                             @endif
                             <div class="py-4 d-flex flex-row">
-                                <h5><span class="far fa-check-square pe-2"></span><b>69Wallet</b> |</h5>
-                                <span class="ps-2">Pay</span>
+                                <h5><span class="far fa-check-square pe-2"></span><b>69Wallet</b></h5>
                             </div>
                             <h4 class="text-success">Rp{{ number_format($produk->harga, 0, ',', '.') }}</h4>
                             <h4>{{ $produk->nama_produk }}</h4>
@@ -79,36 +78,48 @@
                                                 maxlength="5" hidden>
                                         </div>
                                     </div>
-
-                                    <button value="{{ $produk->id_produk }}" type="submit"
-                                        class="btn btn-primary btn-block btn-lg mt-3">
+                                    <select disabled class="form-control select2 mx-auto mt-2" style="width: 100%"
+                                        name="id_reward" id="id_reward">
+                                        <option selected disabled value="">
+                                            Pilih voucher anda</option>
+                                        <option value="">
+                                            tidak memilih
+                                        </option>
+                                        @foreach ($redtail as $rw)
+                                        @if ($rw->status == 'tidak terpakai')
+                                            <option value="{{ $rw->id_reward_detail }}">
+                                                {{ $rw->nama_reward }}</option>
+                                        @endif
+                                        @endforeach
+                                    </select>
+                                    <button disabled value="{{ $produk->id_produk }}" type="submit"
+                                        class="btn btn-primary btn-block btn-lg mt-3 buyBtn">
                                         Bayar
                                     </button>
-                                </form>
                             </div>
                         </div>
 
                         <div class="col-md-5 col-xl-4 offset-xl-1">
                             <div class="py-4 d-flex justify-content-end">
-                                <h6><a href="{{ route('dashboard_user.index') }}">Cancel and return to website</a></h6>
+                                <h6><a href="{{ route('dashboard_user.index') }}">Kembali ke halaman utama</a></h6>
                             </div>
-                            <div class="rounded d-flex flex-column border" style="background-color: #f8f9fa;">
+                            <div class="rounded d-flex flex-column borde mb-3" style="background-color: #f8f9fa;">
                                 <img class="rounded-top" src="{{ asset('storage/storage/' . $produk->foto_produk) }}"
                                     alt="" width="100%">
-                                @if ($produk->kategori_id == 1)
-                                    <div class="p-2 me-3">
-                                    </div>
-                                    <div class="p-2 d-flex">
-                                        <div class="col-8">Nomor Telepon</div>
-                                        <div class="ms-auto">{{ $user->akun->no_telp }}</div>
-                                    </div>
-                                    <div class="p-2 d-flex">
-                                        <div class="col-8">Harga poin</div>
-                                        <div class="ms-auto">{{ $produk->poin }}</div>
-                                    </div>
-                                @endif
+
+                                <div class="p-2 me-3">
+                                </div>
+                                <div class="p-2 d-flex">
+                                    <input type="text" class="form-control" id="phone" name="phone" value=""
+                                        placeholder="Masukan nomor telepon">
+                                </div>
+                                <div id="phone-error" class="text-danger"></div>
+                                <div class="p-2 d-flex">
+                                </div>
+
                             </div>
                         </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -147,7 +158,34 @@
             <!-- Page level custom scripts -->
             <script src="{{ asset('assets/js/demo/chart-area-demo.js') }}"></script>
             <script src="{{ asset('assets/js/demo/chart-pie-demo.js') }}"></script>
+            <script>
+                $('.buyBtn').prop('disabled', true);
+                // Validasi nomor HP saat input
+                $('#phone').on('input', function() {
+                    var phoneNumber = $(this).val().trim();
+                    var isValid = /^(\+62|08)[0-9]{9,}$/.test(phoneNumber);
+                    $('.buyBtn').prop('disabled', !isValid);
+                    $('#phone-error').text(isValid ? '' : 'Masukkan nomor HP yang valid (awalan 08 atau +62)');
+                });
 
+                // Handler saat tombol "Beli" di klik
+                $('.buyBtn').click(function(event) {
+                    if ($(this).prop('disabled')) {
+                        event.preventDefault(); // Mencegah perilaku default dari tautan saat dinonaktifkan
+                        $('#phone-error').text('Mohon isi nomor HP yang valid sebelum melakukan pembelian.');
+                        return false; // Menghentikan aksi default
+                    }
+                });
+
+                $(document).ready(function() {
+                    $('#payment-option1').click(function() {
+                        $('#id_reward').prop('disabled', false);
+                    });
+                    $('#payment-option2').click(function() {
+                        $('#id_reward').prop('disabled', true);
+                    });
+                });
+            </script>
             </body>
 
             </html>

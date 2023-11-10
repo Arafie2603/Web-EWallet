@@ -2,10 +2,11 @@
 <nav class="navbar navbar-expand navbar-light bg-white topbar static-top shadow">
     <!-- Topbar Navbar -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-        <div class="sidebar-brand-icon">
-            <img src="{{ asset('assets/logo.png') }}" alt="">
-        </div>
-        <div class="sidebar-brand-text mx-3 text-primary font-weight-bold">69 Wallet</div>
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+            <div class="sidebar-brand-icon">
+                <img src="{{ asset('assets/69wallet.png') }}" width="125px" alt="">
+            </div>
+        </a>
     </a>
     <ul class="navbar-nav ml-auto">
 
@@ -40,7 +41,7 @@
         <div class="col-lg-7">
             <div class="p-5 m-5">
                 <div class="text-center">
-                    <h1 class="h4 text-gray-900 mb-4 font-weight-bold">Create an Account !</h1>
+                    <h1 class="h4 text-gray-900 mb-4 font-weight-bold">Buat akun !</h1>
                 </div>
                 <form method="post" action="{{ url('pendaftaran') }}" enctype="multipart/form-data" class="user">
                     @csrf
@@ -66,7 +67,7 @@
                             class="form-control @error('name')
                                 is-invalid
                             @enderror  form-control-user"
-                            id="name" placeholder="name" value="{{ old('name') }}">
+                            id="name" placeholder="nama" value="{{ old('name') }}">
                         @error('name')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
@@ -91,7 +92,7 @@
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
-                    <button type="submit" class="btn btn-primary btn-user btn-block">Register</button>
+                    <button type="submit" class="btn btn-primary btn-user btn-block">Daftar</button>
                 </form>
             </div>
         </div>

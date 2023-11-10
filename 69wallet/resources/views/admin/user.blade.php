@@ -2,10 +2,6 @@
 @section('content')
     {{-- =================ADMIN DASHBOARD============== --}}
     <div class="container-fluid">
-
-        <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800">Daftar User</h1>
-        <!-- DataTales Example -->
         <div class="card shadow mb-4">
             {{-- <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary">Daftar User 69 Wallet</h6>
@@ -17,6 +13,14 @@
                         <div class="alert-body">
                             <button class="close" data-dismiss="alert"><span>x</span></button>
                             {{ session('success') }}
+                        </div>
+                    </div>
+                @endif
+                @if (session('error'))
+                    <div class="alert alert-danger alert-dimissible show fade">
+                        <div class="alert-body">
+                            <button class="close" data-dismiss="alert"><span>x</span></button>
+                            {{ session('error') }}
                         </div>
                     </div>
                 @endif
@@ -110,6 +114,7 @@
                     </div>
                 </div>
             </div>
+          
 
             <div class="modal fade" id="ubah_user{{ $dt->id }}" tabindex="-1" role="dialog"
                 aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -117,7 +122,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Ubah Data
-                                Staff Kasir</h5>
+                                Pengguna</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -129,7 +134,7 @@
                                 <div class="form-group mt-3">
                                     <input type="text" id="id" name="id" placeholder="Masukkan nomor id"
                                         class="form-control" required autocomplete="off" value="{{ $dt->id }}"
-                                        maxlength="5">
+                                        maxlength="5" readonly>
                                 </div>
                                 <div class="form-group mt-3">
                                     <input type="text" id="name" name="name" placeholder="Masukkan name staff"
@@ -137,7 +142,15 @@
                                 </div>
                                 <div class="form-group mt-3">
                                     <input type="email" id="email" name="email" placeholder="Masukkan email"
-                                        class="form-control" required autocomplete="off" value="{{ $dt->email }}">
+                                        class="form-control" autocomplete="off" value="{{ $dt->email }}">
+                                </div>
+                                <div class="form-group mt-3">
+                                    <input type="number" step="any" id="saldo" name="saldo" placeholder="Masukkan saldo"
+                                        class="form-control" autocomplete="off" value="{{ $dt->saldo }}">
+                                </div>
+                                <div class="form-group mt-3">
+                                    <input type="number" step="any" id="poin" name="poin" placeholder="Masukkan poin"
+                                        class="form-control" autocomplete="off" value="{{ $dt->poin }}">
                                 </div>
                                 <div class="form-group mt-3">
                                     <input id="password" type="password"

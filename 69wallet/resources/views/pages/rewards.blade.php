@@ -45,47 +45,38 @@
         <div class=" h-100">
             <div class="card-body" align="Center">
                 <h5 class="card-title"></h5>
-                <form action="{{ url('reedem') }}" enctype="multipart/form-data" method="POST">
-                    <div class="row">
-                        @foreach ($reward as $rw)
-                            @csrf
-                            <div class="col-3">
-                                <div class="card text-left mb-3">
-                                    <form action="{{ url('reedem') }}" enctype="multipart/form-data">
-                                        @csrf
+                <div class="row">
+                    @foreach ($reward as $rw)
+                        <div class="col-3">
+                            <div class="card text-left mb-3">
+                                <form action="{{ url('reedem') }}" enctype="multipart/form-data" method="POST">
+                                    @csrf
 
-                                        <div class="card-body">
-                                            <h5 class="card-title ">{{ $rw->nama_reward }}</h5>
-                                            <p class="card-text">
-                                                <small class="text-muted">Harga: {{ $rw->harga_poin }} Poin</small>
-                                            </p>
-                                            <div class="form-group mt-3">
-                                                <input type="number" id="reedem" name="reedem"
-                                                    value="{{ $rw->harga_poin }}" class="form-control" required
-                                                    autocomplete="off" hidden>
-                                            </div>
-                                            <div class="form-group mt-3">
-                                                <input type="number" id="no_telp" name="no_telp"
-                                                    value="{{ $user->akun->no_telp }}" class="form-control" required
-                                                    autocomplete="off" hidden>
-                                            </div>
-                                            <div class="form-group mt-3">
-                                                <input type="number" id="id_reward" name="id_reward"
-                                                    value="{{ $rw->id_reward }}" class="form-control" required
-                                                    autocomplete="off" hidden>
-                                            </div>
-                                            <button value="{{ $rw->id_reward }}" type="submit"
-                                                class="btn btn-primary btn-block btn-lg mt-3">
-                                                Reedem
-                                            </button>
+                                    <div class="card-body">
+                                        <h5 class="card-title ">{{ $rw->nama_reward }}</h5>
+                                        <p class="card-text">
+                                            <small class="text-muted">Harga: {{ $rw->harga_poin }} Poin</small>
+                                        </p>
+                                        <div class="form-group mt-3">
+                                            <input type="number" id="reedem" name="reedem"
+                                                value="{{ $rw->harga_poin }}" class="form-control" required
+                                                autocomplete="off" hidden>
                                         </div>
-                                    </form>
-                                </div>
+                                        <div class="form-group mt-3">
+                                            <input type="number" id="id_reward" name="id_reward"
+                                                value="{{ $rw->id_reward }}" class="form-control" required
+                                                autocomplete="off" hidden>
+                                        </div>
+                                        <button value="{{ $rw->id_reward }}" type="submit" class="btn btn-primary btn-block btn-lg mt-3">
+                                            Reedem
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
-                        @endforeach
-                </form>
-            </div>
+                        </div>
+                    @endforeach
+                </div>
 
+            </div>
         </div>
-    </div>
-@endsection
+    @endsection

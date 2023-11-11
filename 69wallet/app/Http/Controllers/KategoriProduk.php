@@ -34,10 +34,17 @@ class KategoriProduk extends Controller
 
     public function halreward()
     {
-        $user = User::where('id', '=', Auth::user()->id)->firstOrFail(); 
-        $reward = Reward::all();  
-        // dd($produk); 
-        return view('pages.rewards', compact('user', 'reward'));
+        $user = Auth::user();
+        if ($user) {
+            // Pastikan data user ada
+            $user = User::where('id', $user->id)->firstOrFail();
+            $reward = Reward::all();  
+            return view('pages.rewards', compact('user', 'reward'));
+        } else {
+            // Handle jika data user tidak ditemukan
+            return redirect()->back()->with('error', 'User not found');
+        }
+        
     }
 
     public function reedem(Request $request)
@@ -48,7 +55,7 @@ class KategoriProduk extends Controller
         $poinUser = $akun->akun->poin;
         if ($poinUser < $request->reedem) {
             $rewardDetail->status = 'gagal';
-            return redirect()->back()->with('error', 'Maaf poin anda tidak mencukupi, silahkan isi terlebih dahulu');
+            return redirect()->back()->with('error', 'Maaf poin anda tidak mencukupi');
         } 
         $result_reedem = $poinUser - $request->reedem;
         $akun->akun->poin = $result_reedem;

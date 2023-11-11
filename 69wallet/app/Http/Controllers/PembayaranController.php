@@ -79,13 +79,12 @@ class PembayaranController extends Controller
             } else if ($harga >= 20000 && $harga < 25000) {
                 $poin = 4;
                 $poinUser += $poin;
-            }else if($harga >= 25000 && $harga < 30000) {
+            } else if ($harga >= 25000 && $harga < 30000) {
                 $poin = 5;
                 $poinUser += $poin;
             }
             $request->session()->put('poin', $poin);
             $user->akun->poin = $poinUser;
-    
         } else if ($request->payment == 'poin') {
 
             $poinBaru = $poinUser - $poinProduk;
@@ -101,9 +100,9 @@ class PembayaranController extends Controller
             ->where('status', '=', 'tidak terpakai')
             ->get('reward_details.*');
         try {
-            if($result == true) {
+            if ($result == true) {
                 // dd($request->id_reward);
-                
+
                 // dd($reward);
                 $discount = intval($reward[0]->nilai_reward * $hargaProduk);
                 $harga = $hargaProduk - $discount;
@@ -121,22 +120,27 @@ class PembayaranController extends Controller
         $user->akun->save();
 
         // Transaksi
-        $transaksi->akun_id = $user->akun->user_id;
-        $transaksi->id_transaksi = date('Y') . str_pad($jumlah + 1, 3, '0', STR_PAD_LEFT);
-        $transaksi->total_harga = $harga;
-        $transaksi->noTelp = $request->phone;
-        $transaksi->total_item = 1;
-        $transaksi->status = 'berhasil';
-        $transaksi->akuns()->associate($user->akun)->save();
-        $user->akun->save();
+        try {
+            $transaksi->akun_id = $user->akun->user_id;
+            $transaksi->id_transaksi = date('Y') . str_pad($jumlah + 1, 3, '0', STR_PAD_LEFT);
+            $transaksi->total_harga = $harga;
+            $transaksi->noTelp = $request->phone;
+            $transaksi->total_item = 1;
+            $transaksi->status = 'berhasil';
+            $transaksi->akuns()->associate($user->akun)->save();
+            $user->akun->save();
 
-        //Transak siDetail
-        $transaksiDetail->transaksi_id =  $transaksi->id_transaksi;
-        $transaksiDetail->produk_id = $request->id_produk;
-        $transaksiDetail->harga_satuan = $hargaProduk;
-        $transaksiDetail->reward_poin = $poin;
-        $transaksiDetail->jumlah = 1;
-        $transaksiDetail->save();
+            //Transak siDetail
+            $transaksiDetail->transaksi_id =  $transaksi->id_transaksi;
+            $transaksiDetail->produk_id = $request->id_produk;
+            $transaksiDetail->harga_satuan = $hargaProduk;
+            $transaksiDetail->reward_poin = $poin;
+            $transaksiDetail->jumlah = 1;
+            $transaksiDetail->save();
+        } catch (\Throwable $th) {
+            //throw $th;
+            return back()->with('error', 'Sepertinya ada kesalahan dalam sistem, sebaiknya lakukan ulang transaksi');
+        }
         // Join antara transa detial dengan produk berdasarkan id user yang melakukan transaksi
         $tranDetail = TransaksiDetail::with('produk')->where('produk_id', $request->id_produk)->first();
         return view('pages.receipt', compact('data', 'transaksi', 'transaksiDetail', 'tranDetail', 'poin', 'result', 'discount', 'reward'));
@@ -145,20 +149,20 @@ class PembayaranController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function detail(Request $request, string $id) 
+    public function detail(Request $request, string $id)
     {
         $jumlah = Transaksi::count();
         $user = User::with('akun')->find(Auth::user()->id);
         $transaksiDetail = DB::table('transaksi_details')
-                        ->select('*')
-                        ->join('produks', 'produks.id_produk', '=', 'transaksi_details.produk_id')
-                        ->join('transaksis', 'transaksis.id_transaksi', '=', 'transaksi_details.transaksi_id')
-                        ->where('id_transaksi_detail', '=', $id)
-                        ->get('transaksi_details.*');
+            ->select('*')
+            ->join('produks', 'produks.id_produk', '=', 'transaksi_details.produk_id')
+            ->join('transaksis', 'transaksis.id_transaksi', '=', 'transaksi_details.transaksi_id')
+            ->where('id_transaksi_detail', '=', $id)
+            ->get('transaksi_details.*');
         // dd($transaksiDetail);
 
         $selisih = $transaksiDetail[0]->harga - $transaksiDetail[0]->total_harga;
-    
+
         $produk = new Produk();
 
         return view('pages.detail_receipt', compact('jumlah', 'user', 'transaksiDetail', 'produk', 'selisih'));

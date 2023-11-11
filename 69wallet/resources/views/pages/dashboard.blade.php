@@ -64,19 +64,19 @@
                     <div class="col-xl-8 col-md-8 mb-4">
                         <div class="d-flex align-items-center">
                             <a href="{{ url('history') }}" class="btn-btn text-decoration-none">
-                                <h5 class="text-decoration-none card-title text-dark font-weight-bold mr-auto">Vocher saya
+                                <h5 class="text-decoration-none card-title text-dark font-weight-bold mr-auto">Voucer saya
                                 </h5>
                             </a>
                         </div>
                         {{-- {{ dd($rs->status == 'tidak terpakai') }} --}}
                         @if ($redtail->total() == 0)
                             <div class="d-flex">
-                                <div class="card shadow py-2 h-150 mr-3" style="min-width: 500px;">
+                                <div class="py-2 h-150 mr-3" style="min-width: 500px;">
                                     <div class="card-body">
                                         <div class="row no-gutters align-items-center">
                                             <div class="col mr-2">
                                                 <div class="text-center h5 mb-0 font-weight-bold text-gray-800">
-                                                    Tidak ada voucher
+                                                    Tidak ada Voucer
                                                 </div>
                                             </div>
                                         </div>
@@ -150,7 +150,7 @@
                             <th>Nama Produk</th>
                             <th>Tanggal Pembayaran</th>
                             <th>Nomor Telepon</th>
-                            <th>Saldo</th>
+                            <th>Pengeluaran</th>
                             <th>Poin</th>
                             <th>Status</th>
                             <th>Detail</th>

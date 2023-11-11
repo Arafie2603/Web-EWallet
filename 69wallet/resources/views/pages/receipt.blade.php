@@ -43,9 +43,12 @@
                                             <table style="width: 100%">
                                                 <tr>
                                                     <td style="width: 40%">{{ $tranDetail->produk->nama_produk }}</td>
-                                                    <td style="width: 50%"></td>
+                                                    <td style="width: 46%"></td>
+                                                    @if ($transaksi->total_harga > 1000)
                                                     <td>Rp{{ number_format($transaksiDetail->harga_satuan) }}
-                                                    </td>
+                                                    @elseif($transaksi->total_harga < 999)
+                                                    <td>{{ ($transaksi->total_harga) }} Poin</td>
+                                                    @endif
                                                 </tr>
                                                 <tr>
                                                     @if ($result)
@@ -61,7 +64,11 @@
                                             {{ str_pad('', 45, '=') }}
                                             <div class="d-flex justify-content-between">
                                                 <p>Total :</p>
+                                                @if ($transaksi->total_harga > 1000)
                                                 <p>Rp.{{ number_format($transaksi->total_harga) }}</p>
+                                                @elseif($transaksi->total_harga < 999)
+                                                <p>{{ number_format($transaksi->total_harga) }} Poin</p>
+                                                @endif
                                             </div>
                                             <p class="text-center pt-5">Transaksi anda berhasil !</p>
                                             {{-- <div class="d-flex justify-content-center">{!! DNS1D::getBarcodeHTML($transaksi->id_transaksi, 'C128', 3, 60) !!}</div> --}}

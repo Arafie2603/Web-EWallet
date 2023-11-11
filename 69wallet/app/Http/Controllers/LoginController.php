@@ -46,7 +46,7 @@ class LoginController extends Controller
             return redirect()->to('/')->with('error', 'Email atau password salah');
         }
         } catch (\Throwable $th) {
-            return back()->with('error', 'Ada kesalahan dalam progra');
+            return back()->with('error', 'Ada kesalahan dalam prograM');
         }
     }
 

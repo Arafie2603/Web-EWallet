@@ -75,9 +75,9 @@
                 <form action="{{ url('dash_poin') }}" enctype="multipart/form-data" method="POST">
                     <div class="d-flex justify-content-center mb-5">
                         <input id="poin_achieve" name="poin_achieve"value="3" class="form-control w-25 mb-2" hidden>
-                        <a class="btn btn-primary" value="" href="{{ url('dash_poin') }}" type="submit"><i
-                                class="fa-solid fa-utensils"></i>
-                            Pesan Lagi</a>
+                        <a class="btn btn-primary" value="" href="{{ url('dash_poin') }}"
+                            type="submit"><i class="fas fa-home"></i>
+                            Kembali ke halaman utama</a>
                     </div>
                 </form>
 

@@ -13,7 +13,7 @@
                 <th>Nama produk</th>
                 <th>Tanggal pembayaran</th>
                 <th>Nomor Telepon</th>
-                <th>Saldo</th>
+                <th>Pengeluaran</th>
                 <th>Poin</th>
                 <th>Status</th>
                 <th>Detail</th>
@@ -24,7 +24,7 @@
                                     width="100" height="100" alt=""></td>
                             <td>{{ $td->nama_produk }}</td>
                             <td>{{ $date[$index] }}</td>
-                            <td>{{ $user->akun->no_telp }}</td>
+                            <td>{{ $td->noTelp }}</td>
                             @if ($td->total_harga >= 3000)
                             <td>-Rp{{ number_format($td->total_harga, 0, ',', '.') }}</td>
                             @else

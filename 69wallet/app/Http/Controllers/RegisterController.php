@@ -63,13 +63,13 @@ class RegisterController extends Controller
             $akun->user_id = $user->id;
             $akun->no_telp = '';
             $akun->poin = 0;
-            $akun->saldo = 0;
+            $akun->saldo = 300000;
             $akun->pengeluaran = 0;
             $akun->save();  
             return redirect()->to('/')->with('success', 'data berhasil ditambahkan');
         } catch (\Throwable $th) {
             //throw $th;
-            return redirect()->back()->with('error', 'Data gagal ditambahkan, email sudah terdaftar');
+            return redirect()->back()->with('error', 'Data gagal ditambahkan, pengguna sudah terdaftar');
         }
     }
 

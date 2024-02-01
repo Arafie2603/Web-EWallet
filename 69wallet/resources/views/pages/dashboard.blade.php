@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container-fluid">
-        <a href="#" class="btn btn-success btn-icon-split">
+        <a href="{{ route('topUp') }}" class="btn btn-success btn-icon-split">
             <span class="icon text-white-50">
                 <i class="fas fa-plus"></i>
             </span>

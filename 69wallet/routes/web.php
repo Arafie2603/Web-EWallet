@@ -12,6 +12,7 @@ use App\Http\Controllers\RewardsController;
 use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\topUpController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +49,7 @@ Route::get('cetak_riwayat', [RiwayatController::class, 'index']);
 
 Route::resource('dashboard_user', UserController::class);
 Route::post('/dashboard_user', [UserController::class, 'index']);
+Route::get('/topUp', [TopUpController::class, 'index'])->name('topUp');
 Route::get('/profile', [LoginController::class, 'profile'])->name('profile');
 Route::get('history', [UserController::class, 'history']);
 Route::get('filter', [UserController::class, 'filter']);

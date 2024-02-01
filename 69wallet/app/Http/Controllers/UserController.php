@@ -6,10 +6,11 @@ use Illuminate\Http\Request;
 use \App\Models\User;
 use \App\Models\Akun;
 use App\Models\RewardDetail;
-use App\Models\Transaksi;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\URL;
+
 
 use function PHPUnit\Framework\isNull;
 
@@ -20,8 +21,9 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+        $user = User::with('akun')->find(Auth::user()->id);
+        // dd($user->status);
         try {
-            $user = User::with('akun')->find(Auth::user()->id);
             if ($user->role_id == 1) {
                 $user = User::where('id', '=', Auth::user()->id)->firstOrFail();
                 $lastUser = User::latest()->first();
@@ -30,7 +32,6 @@ class UserController extends Controller
                 return view('admin.user', compact('user', 'data_user', 'lastId'));
                 // return redirect()->route('user.index', compact('user', 'data_user', 'lastId'));
             }
-
             $transa = DB::table('transaksi_details')
                 ->select('*')
                 ->join('produks', 'produks.id_produk', '=', 'transaksi_details.produk_id')
@@ -72,9 +73,6 @@ class UserController extends Controller
             $date = '';
             $poin = 0;
         }
-        // dd($finalPoin);
-        // dd($date);
-        // $user->akun->poin += $poin;
         $user->akun->save();
 
         return view('pages.dashboard', compact('user', 'transa', 'finalPoin', 'date', 'redtail'));
@@ -82,7 +80,7 @@ class UserController extends Controller
 
     // History Page
 
-    public function history()
+    public function history(Request $request)
     {
         $user = User::with('akun')->find(Auth::user()->id);
         $transaAll = DB::table('transaksi_details')
@@ -93,13 +91,74 @@ class UserController extends Controller
             ->orderBy('transaksi_details.created_at', 'desc')
             ->paginate(5);
 
-
         $redtail = DB::table('reward_details')
             ->select('*')
             ->join('akuns', 'akuns.id_akun', 'reward_details.akun_id')
             ->join('rewards', 'rewards.id_reward', '=', 'reward_details.reward_id')
             ->where('akun_id', '=', $user->akun->id_akun)
             ->orderBy('reward_details.created_at', 'desc')
+            ->paginate(3);
+        // dd($redtail->harga_poin);
+
+        $rewardDetail = RewardDetail::select('*')
+            ->where('akun_id', '=', $user->akun->id_akun)
+            ->get();
+        try {
+
+            $finalPoin = [];
+            $date = [];
+            $date_poin = [];
+            foreach ($transaAll as $tr) {
+                $created_at = $tr->created_at;
+                $poin = 0;
+                $harga = $tr->harga_satuan;
+                $formated = substr($created_at, 5, -12);
+                $formated = date("F", mktime(0, 0, 0, $formated, 10));
+                // GET year and date
+                $formattedDate = substr($created_at, 8, -9);
+                // GET year
+                $formatedYear = substr($created_at, 0, -15);
+
+                $date2 = ($formated . ',' . $formattedDate . ' ' . $formatedYear);
+                array_push($finalPoin, $poin);
+                array_push($date, $date2);
+            }
+            foreach ($rewardDetail as $rt) {
+                $created_at_poin = $rt->created_at;
+                $formated_poin = substr($created_at_poin, 5, -12);
+                $formated_poin = date("F", mktime(0, 0, 0, $formated_poin, 10));
+                // GET year and date
+                $formattedDate_poin = substr($created_at_poin, 8, -9);
+                // GET year
+                $formatedYear_poin = substr($created_at_poin, 0, -15);
+                $datePoin = ($formated_poin . ',' . $formattedDate_poin . ' ' . $formatedYear_poin);
+                array_push($date_poin, $datePoin);
+            }
+        } catch (\Throwable $th) {
+            $finalPoin = '';
+            $date = '';
+            $poin = 0;
+            $date_poin = '';
+        }
+        return view('pages.history', compact('transaAll', 'user', 'finalPoin', 'date', 'redtail', 'date_poin'));
+    }
+
+    public function filter(Request $request) {
+        $user = User::with('akun')->find(Auth::user()->id);
+        $transaAll = DB::table('transaksi_details')
+            ->select('*')
+            ->join('produks', 'produks.id_produk', '=', 'transaksi_details.produk_id')
+            ->join('transaksis', 'transaksis.id_transaksi', '=', 'transaksi_details.transaksi_id')
+            ->where('akun_id', '=', $user->akun->id_akun)
+            ->orderBy('transaksi_details.created_at', 'asc')
+            ->paginate(5);
+
+        $redtail = DB::table('reward_details')
+            ->select('*')
+            ->join('akuns', 'akuns.id_akun', 'reward_details.akun_id')
+            ->join('rewards', 'rewards.id_reward', '=', 'reward_details.reward_id')
+            ->where('akun_id', '=', $user->akun->id_akun)
+            ->orderBy('reward_details.created_at', 'asc')
             ->paginate(3);
         // dd($redtail->harga_poin);
 
@@ -169,6 +228,9 @@ class UserController extends Controller
      */
     public function create(Request $request)
     {
+    }
+
+    public function CetakPembayaran(Request $request) {
     }
 
     /**

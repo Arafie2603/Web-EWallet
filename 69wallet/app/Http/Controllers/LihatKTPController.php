@@ -2,34 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Akun;
-use App\Models\Produk;
-use App\Models\Reward;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class AdminController extends Controller
+class LihatKTPController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(string $id)
     {
-        $users = Akun::count();
-        $produk = Produk::count();
-        $reward = Reward::count();
-        session([
-            'jumlah_user' => $users,
-            'jumlah_produk' =>$produk,
-            'jumlah_reward' => $reward
-        ]);
+        $user = DB::table('users')->where('id', $id)->first();
 
-        $daftarUser = User::paginate(5);
+        return view('pages.lihat-ktp', compact('user'));
         
-        return view('admin.dashboard', compact('daftarUser'));
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -42,10 +30,9 @@ class AdminController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, string $id)
+    public function store(Request $request)
     {
-        
-        
+        //
     }
 
     /**
@@ -69,7 +56,11 @@ class AdminController extends Controller
      */
     public function update(Request $request, string $id)
     {
-
+        DB::table('users')
+        ->where('id', $id)
+        ->update(['status' => 'verifikasi']);
+        
+        return back()->with('succress', 'Data berhasil diubah');   
     }
 
     /**
@@ -77,6 +68,5 @@ class AdminController extends Controller
      */
     public function destroy(string $id)
     {
-        
     }
 }

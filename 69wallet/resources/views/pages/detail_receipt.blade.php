@@ -1,13 +1,10 @@
 @extends('layouts.base2')
-
-
 @section('content3')
     <main class="content" style="width: 500px; margin:auto;padding-top: 40px">
         <!-- Button trigger modal -->
         <div class="container-fluid p-0">
             <strong>
                 <div class="row">
-
                     <div class="col-xl-12 d-flex mb-5 d-flex justify-content-center">
                         <div class="">
                             <div class="row">
@@ -35,7 +32,6 @@
                                                 </tr>
                                             </table>
                                             {{ str_pad('', 45, '=') }}
-
                                             <table style="width: 100%">
                                                 <tr>
                                                     <td style="width: 40%">{{ $transaksiDetail[0]->nama_produk }}</td>
@@ -51,7 +47,6 @@
                                                         </td>
                                                     </tr>
                                                 @endif
-
                                             </table>
                                             <br>
                                             {{ str_pad('', 45, '=') }}
@@ -62,14 +57,12 @@
                                             <p class="text-center pt-5">Terimakasih dan semoga harimu menyenangkan!</p>
                                             {{-- <div class="d-flex justify-content-center">{!! DNS1D::getBarcodeHTML($transaksi->id_transaksi, 'C128', 3, 60) !!}</div> --}}
                                             <p class="text-center pt-3"></p>
-
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
                 {{-- {{ dd($poin_achieve) }} --}}
                 <form action="{{ url('dash_poin') }}" enctype="multipart/form-data" method="POST">
@@ -80,7 +73,6 @@
                             Kembali ke halaman utama</a>
                     </div>
                 </form>
-
         </div>
     </main>
 @endsection

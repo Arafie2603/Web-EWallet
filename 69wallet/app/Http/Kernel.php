@@ -65,6 +65,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'LoginMiddleware' => \App\Http\Middleware\LoginMiddleware::class,
         'NoAuth' => \App\Http\Middleware\NoAuth::class,
-        'cekleveladmin' => \App\Http\Middleware\CekLevelAdmin::class
+        'cekleveladmin' => \App\Http\Middleware\CekLevelAdmin::class,
+        'verified' => \App\Http\Middleware\VerifiedUser::class,
     ];
 }

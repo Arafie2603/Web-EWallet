@@ -14,23 +14,13 @@
                     </li>
                 </ul>
             @endforeach
-            {{-- <div class="card-header py-3">
-<h6 class="m-0 font-weight-bold text-primary">Daftar User 69 Wallet</h6>
-</div> --}}
-
             {{-- ===== Button TAMBAH DATA ===== --}}
-
             <!-- Button trigger modal -->
-
-
             <div class="container-fluid p-0">
                 <div class="row">
-
                     <!-- Telkomsel -->
                     <div class="col-xl-12 col-md-6 mb-4">
-
                         <div class=" h-100">
-
                             <div class="card-body" align="Center">
                                 <h5 class="card-title"></h5>
                                 {{-- ===== AWALAN FORM ===== --}}
@@ -53,25 +43,13 @@
                                             </div>
                                         @endforeach
                                 </form>
-
-
-
                             </div>
-
                         </div>
                     </div>
-
                 </div>
-
             </div>
-
         </div>
     </div>
-
-
-
-
-
 
     </div>
     <!-- Logout Modal-->

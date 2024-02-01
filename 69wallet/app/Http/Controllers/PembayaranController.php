@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\Akun;
 use App\Models\Produk;
 use App\Models\Transaksi;
@@ -11,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf as PDFa;
 
 class PembayaranController extends Controller
 {
@@ -118,13 +118,17 @@ class PembayaranController extends Controller
         }
 
         $user->akun->save();
-
         // Transaksi
         try {
             $transaksi->akun_id = $user->akun->user_id;
             $transaksi->id_transaksi = date('Y') . str_pad($jumlah + 1, 3, '0', STR_PAD_LEFT);
             $transaksi->total_harga = $harga;
-            $transaksi->noTelp = $request->phone;
+            if($request->id_kategori == 2) {
+                $transaksi->noTelp = $request->phone;
+            }else {
+                $transaksi->noTelp = 0;
+
+            }
             $transaksi->total_item = 1;
             $transaksi->status = 'berhasil';
             $transaksi->akuns()->associate($user->akun)->save();
@@ -162,11 +166,12 @@ class PembayaranController extends Controller
         // dd($transaksiDetail);
 
         $selisih = $transaksiDetail[0]->harga - $transaksiDetail[0]->total_harga;
-
+        
         $produk = new Produk();
 
         return view('pages.detail_receipt', compact('jumlah', 'user', 'transaksiDetail', 'produk', 'selisih'));
     }
+
     public function create()
     {
         //

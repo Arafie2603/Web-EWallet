@@ -62,27 +62,51 @@
                                 </div>
                             </div>
                         @endif
-                        <label for="name"></label>
+                        <label for="name">Nama</label>
                         <input name="name" type="name"
                             class="form-control @error('name')
                                 is-invalid
                             @enderror  form-control-user"
-                            id="name" placeholder="nama" value="{{ old('name') }}">
+                            id="name" placeholder="Nama" value="{{ old('name') }}">
                         @error('name')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                     <div class="form-group">
+                        <label for="foto_ktp">Foto KTP</label>
+                        <input name="foto_ktp" type="file"
+                            class="form-control form-control-user @error('foto_ktp')
+                                    is-invalid 
+                                @enderror p-auto pb-5"
+                            id="foto_ktp" placeholder="Foto KTP" value="{{ old('foto_ktp') }}">
+                        @error('foto_ktp')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="no_telp">No Telepon</label>
+                        <input name="no_telp" type="no_telp"
+                            class="form-control form-control-user @error('No Telepon')
+                                    is-invalid
+                                @enderror  "
+                            id="no_telp" placeholder="Nomor Telepon" value="{{ old('No Telepon') }}">
+                        @error('no_telp')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
                         <input name="email" type="email"
                             class="form-control form-control-user @error('email')
                                     is-invalid
                                 @enderror  "
-                            id="exampleInputEmail" placeholder="email" value="{{ old('email') }}">
+                            id="email" placeholder="Email" value="{{ old('email') }}">
                         @error('email')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                     <div class="form-group">
+                        <label for="password">Password</label>
                         <input name="password" type="password"
                             class="form-control @error('password')
                                 is-invalid

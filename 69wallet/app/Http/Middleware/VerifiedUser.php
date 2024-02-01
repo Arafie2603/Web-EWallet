@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class NoAuth
+class VerifiedUser
 {
     /**
      * Handle an incoming request.
@@ -16,10 +16,10 @@ class NoAuth
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // dd('sasa');
-        if(Auth::check()) {
-            return redirect('dashboard_user');
+        if(Auth::check() && Auth::user()->status == 'verifikasi') {
+            return $next($request);
+        }else {
+            return redirect('/dashboard_user')->with('error', 'Anda tidak memiliki izin untuk mengakses halaman ini. Silakan verifikasi akun Anda.');
         }
-        return $next($request);
     }
 }

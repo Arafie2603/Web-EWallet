@@ -26,7 +26,9 @@ class DatabaseSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
             'password' => bcrypt('admin'),
-            'image' => '',
+            'foto_ktp' => 'default.jpg',
+            'no_telp' => "089652744415", 
+            'status' => 'verifikasi',
             'role_id' => 1
 
         ]);
@@ -34,13 +36,14 @@ class DatabaseSeeder extends Seeder
             'name' => 'aralie',
             'email' => 'ara@gmail.com',
             'password' => bcrypt('123'),
-            'image' => '',
+            'foto_ktp' => 'default.jpg',
+            'no_telp' => '089652744415',
+            'status' => "verifikasi",
             'role_id' => 0
 
         ]);
         Akun::create([
             'user_id' => 2,
-            'no_telp' => "0899989",
             'poin' => 10000,
             'saldo' => 50000.00,
             'pengeluaran' => 0

@@ -48,6 +48,7 @@
 <!-- Page level custom scripts -->
 <script src="{{ asset('assets/js/demo/chart-area-demo.js') }}"></script>
 <script src="{{ asset('assets/js/demo/chart-pie-demo.js') }}"></script>
+
 <script>
     // Menonaktifkan tombol "Beli" secara default saat halaman dimuat
     $('.buyBtn').prop('disabled', true);
@@ -68,8 +69,11 @@
             return false; // Menghentikan aksi default
         }
     });
+        
+
 
 </script>
+
 </body>
 
 </html>

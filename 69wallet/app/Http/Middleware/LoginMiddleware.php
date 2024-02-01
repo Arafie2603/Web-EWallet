@@ -15,6 +15,7 @@ class LoginMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        dd('sasa');
         if(!session('berhasil_login')) {
             return redirect('/');
         }

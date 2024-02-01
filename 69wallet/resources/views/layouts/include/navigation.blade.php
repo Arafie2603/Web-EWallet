@@ -1,6 +1,5 @@
 <!-- Page Wrapper -->
 <div id="wrapper">
-
     <!-- Sidebar -->
     <ul class="navbar-nav bg-light sidebar sidebar-dark accordion" id="accordionSidebar">
         <!-- Sidebar - Brand -->

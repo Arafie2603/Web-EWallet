@@ -28,10 +28,13 @@
                             </div>
                             <h4 class="text-success">Rp{{ number_format($produk->harga, 0, ',', '.') }}</h4>
                             <h4>{{ $produk->nama_produk }}</h4>
-
+                            @if ($kategori[0]->nama_kategori ==  'Pulsa') 
                             <p>
                                 Paket yang sangat menghemat kantong anda
                             </p>
+                            @else
+                            <p>Layanan ini sangat menarik</p>
+                            @endif
 
                             <div class="pt-2">
                                 <form class="pb-3" form action="{{ url('pembayaran') }}" method="POST"
@@ -76,6 +79,7 @@
                                                 placeholder="Masukkan nomor id" value="{{ $produk->id_produk }}"
                                                 class="form-control w-25" required autocomplete="off" pattern="[0-9]+"
                                                 maxlength="5" hidden>
+                                            <input type="text" hidden name="id_kategori" value="{{ $produk->kategori_id }}">
                                         </div>
                                     </div>
                                     <select disabled class="form-control select2 mx-auto mt-2" style="width: 100%"
@@ -92,10 +96,19 @@
                                         @endif
                                         @endforeach
                                     </select>
+                                    @if ($produk->kategori_id == 2) 
                                     <button disabled value="{{ $produk->id_produk }}" type="submit"
                                         class="btn btn-primary btn-block btn-lg mt-3 buyBtn">
                                         Bayar
                                     </button>
+                                    @else
+                                    <button value="{{ $produk->id_produk }}" type="submit"
+                                        class="btn btn-primary btn-block btn-lg mt-3">
+                                        Bayar
+                                    </button>
+
+                                    @endif
+                                    
                             </div>
                         </div>
 
@@ -109,10 +122,14 @@
 
                                 <div class="p-2 me-3">
                                 </div>
-                                <div class="p-2 d-flex">
-                                    <input type="text" class="form-control" id="phone" name="phone" value=""
-                                        placeholder="Masukan nomor telepon">
-                                </div>
+                                @foreach ($kategori as $kate)      
+                                    @if ($kate->nama_kategori == 'Pulsa')
+                                    <div class="p-2 d-flex">
+                                        <input type="text" class="form-control" id="phone" name="phone" value=""
+                                            placeholder="Masukan nomor telepon">
+                                    </div>
+                                    @endif
+                                @endforeach
                                 <div id="phone-error" class="text-danger"></div>
                                 <div class="p-2 d-flex">
                                 </div>

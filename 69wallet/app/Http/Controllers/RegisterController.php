@@ -54,14 +54,20 @@ class RegisterController extends Controller
             $user->name = $request->name;
             $user->email = $request->email;
             $user->password = $password;
+            $user->status = 'belum verifikasi';
+            $user->no_telp = $request->no_telp;
             $user->role_id = 0;
-            $user->image = 'default.png';
+            if ($request->hasFile('foto_ktp')) {
+                $image = $request->file('foto_ktp');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->storeAs('public/storage', $imageName);
+                $user->foto_ktp = '/' . $imageName;
+            }
     
             $user->save();
     
             $akun = new Akun();
             $akun->user_id = $user->id;
-            $akun->no_telp = '';
             $akun->poin = 0;
             $akun->saldo = 300000;
             $akun->pengeluaran = 0;

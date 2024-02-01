@@ -24,6 +24,15 @@ class KategoriProduk extends Controller
         return view('pages.kategori_produk', compact('kategori', 'produk', 'user'));
     }
 
+    public function search(Request $request) {
+        $user = User::with('akun')->find(Auth::user()->id);
+        $kategori = Kategori::all();
+        $produk = DB::table('produks')
+        ->where('nama_produk', 'LIKE', "%{$request->search}%")
+        ->get(); 
+        return view('pages.kategori_produk', compact('kategori', 'produk', 'user'));
+    }
+
     /**
      * Show the form for creating a new resource.
      */

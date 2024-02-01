@@ -2,6 +2,12 @@
 
 @section('content')
     <div class="container-fluid">
+        <a href="#" class="btn btn-success btn-icon-split">
+            <span class="icon text-white-50">
+                <i class="fas fa-plus"></i>
+            </span>
+            <span class="text">Top Up</span>
+        </a>
         {{-- ===== DASHBOARD USER ===== --}}
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-2">

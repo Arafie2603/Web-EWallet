@@ -34,6 +34,9 @@ class ProdukController extends Controller
     public function bayar(Request $request, string $id)
     {
         $user = User::with('akun')->find(Auth::user()->id);
+        $kategori = DB::table('kategoris')
+        ->where('id_kategori', $id)
+        ->get();
         $produk =  Produk::where('id_produk', $id)->first();
         $redtail = DB::table('reward_details')
         ->select('*')
@@ -42,7 +45,7 @@ class ProdukController extends Controller
         ->where('akun_id', '=', $user->akun->id_akun)
         ->get('reward_details.*');
         $prokat = Produk::with('kategori')->where('kategori_id', $produk->id_produk)->first();
-        return view('pages.pembayaran', compact('produk', 'prokat', 'user', 'redtail'));
+        return view('pages.pembayaran', compact('produk', 'prokat', 'user', 'redtail', 'kategori'));
 
     }
 
